@@ -1,0 +1,88 @@
+ {
+        "manifestVersion": 1,
+        "id": "change-status",
+        "version": "0.1.39",
+        "name": "Change Status",
+        "description": "Quickly change work item status from context menu",
+        "publisher": "KonradSikorski",
+        "targets": [
+            {
+                "id": "Microsoft.VisualStudio.Services"
+            }
+        ],
+        "icons": {
+            "default": "static/images/logo.png"
+         },
+        "scopes": [
+            "vso.work",
+            "vso.work_write"
+        ],
+        "categories": [
+            "Plan and track"
+        ],
+        "tags": [
+            "work item",
+            "menu",
+            "status"
+        ],
+        "repository": {
+            "type": "git",
+            "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeStatus"
+        },
+        "branding": {
+            "color": "rgb(220, 235, 252)",
+            "theme": "light"
+        },
+        "content": {
+            "details": {
+                "path": "details.md"
+            }
+        },
+        "contributions": [
+            {
+                "id": "ChangeStatusForward",
+                "type": "ms.vss-web.action",
+                "description": "Move item to the next status.",
+                "targets": [
+                    "ms.vss-work-web.backlog-item-menu",
+                    "ms.vss-work-web.work-item-context-menu"
+                    ],
+                "properties": {
+                    "text": "Change status: Forward",
+                    "title": "Move item to the next status",
+                    "icon": "static/images/changeStatusForward.png",
+                    "groupId": "modify",
+                    "uri": "static/changeStatusForward.html",
+                    "registeredObjectId": "ChangeStatusForward"
+                }
+            },
+            {
+                "id": "ChangeStatusBackward",
+                "type": "ms.vss-web.action",
+                "description": "Move item to the previous status.",
+                "targets": [
+                    "ms.vss-work-web.backlog-item-menu",
+                    "ms.vss-work-web.work-item-context-menu"
+                    ],
+                "properties": {
+                    "text": "Change status: Backward",
+                    "title": "Move item to the previous status",
+                    "icon": "static/images/changeStatusBackward.png",
+                    "groupId": "modify",
+                    "uri": "static/changeStatusBackward.html",
+                    "registeredObjectId": "ChangeStatusBackward"
+                }
+            }
+        ],
+        "files": [
+            {
+                "path": "static", "addressable": true
+            },
+            {
+                "path": "src", "addressable": true
+            },
+            {
+                "path": "sdk/scripts", "addressable": true
+            }
+        ]
+    }
