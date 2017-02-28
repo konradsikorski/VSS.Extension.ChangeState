@@ -193,6 +193,30 @@ function getReasonForStateForType(type, fromState, toState){
             stateToReason[type][toState][fromState];
 }
 
+function getCommonStatuses(itemTypes){
+    var statesForType = stateToReason[itemTypes[0]];
+    var states = [];
+
+    // init statuses array using first item type
+    for(var state in statesForType)
+    {
+        states.push(state);
+    }
+
+    // remove uncommon statuses
+    for(var i=1; i<itemTypes.length; ++i){
+        statesForType = stateToReason[itemTypes[i]];
+
+        for(var j=0; j<states.length; ++j){
+            if(!statesForType[states[j]]){
+                states.splice(j--,1);
+            }
+        }
+    }
+
+    return states;
+}
+
 function changeStatus(selectedItems, forward){
     VSS.require(["VSS/Service", "TFS/WorkItemTracking/RestClient"], function (VSS_Service, TFS_Wit_WebApi) {
         var witClient = VSS_Service.getCollectionClient(TFS_Wit_WebApi.WorkItemTrackingHttpClient);

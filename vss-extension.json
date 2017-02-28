@@ -1,7 +1,7 @@
  {
         "manifestVersion": 1,
         "id": "change-status",
-        "version": "0.1.43",
+        "version": "0.1.50",
         "name": "Change Status",
         "description": "Quickly change work item status from context menu",
         "publisher": "KonradSikorski",
@@ -40,37 +40,17 @@
         },
         "contributions": [
             {
-                "id": "ChangeStatusForward",
-                "type": "ms.vss-web.action",
-                "description": "Move item to the next state.",
+                "id": "changeStateMenu",
+                "type": "ms.vss-web.action-provider",
+                "description": "Change state selected items",
                 "targets": [
                     "ms.vss-work-web.backlog-item-menu",
                     "ms.vss-work-web.work-item-context-menu"
-                    ],
+                ],
                 "properties": {
-                    "text": "Change state: Forward",
-                    "title": "Move item to the next state",
-                    "icon": "static/images/changeStatusForward.png",
-                    "groupId": "modify",
-                    "uri": "static/changeStatusForward.html",
-                    "registeredObjectId": "ChangeStatusForward"
-                }
-            },
-            {
-                "id": "ChangeStatusBackward",
-                "type": "ms.vss-web.action",
-                "description": "Move item to the previous state.",
-                "targets": [
-                    "ms.vss-work-web.backlog-item-menu",
-                    "ms.vss-work-web.work-item-context-menu"
-                    ],
-                "properties": {
-                    "text": "Change state: Backward",
-                    "title": "Move item to the previous state",
-                    "icon": "static/images/changeStatusBackward.png",
-                    "groupId": "modify",
-                    "uri": "static/changeStatusBackward.html",
-                    "registeredObjectId": "ChangeStatusBackward"
+                    "name": "Change state",
+                    "uri": "static/changeStatusMenu.html",
+                    "registeredObjectId": "changeStateMenu"
                 }
             }
         ],
