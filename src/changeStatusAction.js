@@ -8,6 +8,167 @@ var statesForType = {
     "Test Case": ["Design", "Ready", "Closed"]
 };
 
+var stateToReason = {
+    "Epic": 
+        {
+            "New": {
+                "Active": "Moved to the backlog" ,
+                "Resolved": "Moved to the backlog",
+                "Closed": "Moved to the backlog",
+                "Removed": "Reconsidering the Epic"
+            }, 
+            "Active": {
+                "New": "Implementation started",
+                "Resolved": "Acceptance tests fail",
+                "Closed": "Reintroduced in Scope"
+            },  
+            "Resolved": {
+                "New": "Features complete",
+                "Active": "Features complete" ,
+                "Closed": "Closed in error"
+            }, 
+            "Closed": {
+                "New": "Acceptance tests pass",
+                "Active": "Acceptance tests pass" ,
+                "Resolved": "Acceptance tests pass"
+            },
+            "Removed": {
+                "New": "Removed from the backlog",
+                "Active": "Removed from the backlog" ,
+                "Resolved": "Removed from the backlog",
+                "Closed": "Removed from the backlog"
+            }
+        },
+    "Feature": 
+        {
+            "New": {
+                "Active": "Moved to the backlog" ,
+                "Resolved": "Moved to the backlog",
+                "Closed": "Moved to the backlog",
+                "Removed": "Reconsidering the Feature"
+            }, 
+            "Active": {
+                "New": "Implementation started",
+                "Resolved": "Acceptance tests fail",
+                "Closed": "Reintroduced in Scope"
+            },  
+            "Resolved": {
+                "New": "Stories complete",
+                "Active": "Stories complete" ,
+                "Closed": "Closed in error"
+            }, 
+            "Closed": {
+                "New": "Acceptance tests pass",
+                "Active": "Acceptance tests pass" ,
+                "Resolved": "Acceptance tests pass",
+            },
+            "Removed": {
+                "New": "Removed from the backlog",
+                "Active": "Removed from the backlog" ,
+                "Resolved": "Removed from the backlog",
+                "Closed": "Removed from the backlog"
+            }
+        },
+    "User Story": 
+        {
+            "New": {
+                "Active": "Moved to the backlog" ,
+                "Resolved": "Moved to the backlog",
+                "Closed": "Moved to the backlog",
+                "Removed": "Reconsidering the User Stor"
+            }, 
+            "Active": {
+                "New": "Implementation started",
+                "Resolved": "Acceptance tests fail",
+                "Closed": "Reintroduced in Scope"
+            },  
+            "Resolved": {
+                "New": "Code complete and unit tests pass",
+                "Active": "Code complete and unit tests pass" ,
+                "Closed": "Closed in error"
+            }, 
+            "Closed": {
+                "New": "Acceptance tests pass",
+                "Active": "Acceptance tests pass" ,
+                "Resolved": "Acceptance tests pass",
+            },
+            "Removed": {
+                "New": "Removed from the backlog",
+                "Active": "Removed from the backlog" ,
+                "Resolved": "Removed from the backlog",
+                "Closed": "Removed from the backlog"
+            }
+        },
+    "Task": 
+        {
+            "New": {
+                "Active": "Work halted" ,
+                "Closed": "Reactivated",
+                "Removed": "Reconsidering the Task"
+            }, 
+            "Active": {
+                "New": "Work started",
+                "Closed": "Reactivated"
+            }, 
+            "Closed": {
+                "New": "Completed",
+                "Active": "Completed"
+            },
+            "Removed": {
+                "New": "Removed from the backlog",
+                "Active": "Removed from the backlog" ,
+                "Closed": "Removed from the backlog"
+            }
+        },
+    "Bug": 
+        {
+            "New": {
+                "Active": "Investigation Complete" ,
+                "Resolved": "Not fixed",
+                "Closed": "Not fixed"
+            }, 
+            "Active": {
+                "New": "Approved",
+                "Resolved": "Not fixed",
+                "Closed": "Regression"
+            },  
+            "Resolved": {
+                "New": "Fixed",
+                "Active": "Fixed" ,
+                "Closed": "Resolved in error"
+            }, 
+            "Closed": {
+                "New": "Fixed and verified",
+                "Active": "Fixed and verified" ,
+                "Resolved": "Verified",
+            }
+        },
+    "Issue": 
+        {
+            "Active": {
+                "Closed": "Reactivated"
+            },
+            "Closed": {
+                "Active": "Issue Resolved"
+            }
+        },
+    "Test Case": 
+        {
+            "Design": {
+                "Ready": "Update Test Case",
+                "Closed": "Reactivated"
+            }, 
+            "Ready": {
+                "Design": "Completed",
+                "Closed": "Reactivated"
+            },
+            "Closed": {
+                "Design": "Obsolete",
+                "Ready": "Obsolete"
+            }
+        }
+}
+
 function getNextState(type, state){
     var states = statesForType[type];
 
@@ -26,152 +187,10 @@ function getPrevState(type, state){
         : null;
 }
 
-function getReasonForState(type, fromState, toState){
-    switch(type){
-        case "Epic": return getReasonForStateForEpic(fromState, toState);
-        case "Feature": return getReasonForStateForFeature(fromState, toState);
-        case "User Story": return getReasonForStateForUserStory(fromState, toState);
-        case "Task": return getReasonForStateForTask(fromState, toState);
-        case "Bug": return getReasonForStateForBug(fromState, toState);
-        case "Issue": return getReasonForStateForIssue(fromState, toState);
-        case "Test Case": return getReasonForStateForTestCase(fromState, toState);
-    }
-}
-
-function getReasonForStateForUserStory(fromState, toState){
-    switch (toState){
-        case "New": 
-            switch(fromState){
-                case "Removed": return "Reconsidering the User Story";
-                default: return "Moved to the backlog";
-            }
-        case "Active": 
-            switch(fromState){
-                case "Resolved": return "Acceptance tests fail";
-                case "Closed": return "Reintroduced in Scope"
-                default: return "Implementation started";
-            }
-        case "Resolved": 
-            switch(fromState){
-                case "Closed": return "Closed in error";
-                default: return "Code complete and unit tests pass";
-            }
-        case "Removed": return "Removed from the backlog";
-        case "Closed": return "Acceptance tests pass";
-    }
-}
-
-function getReasonForStateForEpic(fromState, toState){
-    switch (toState){
-        case "New": 
-            switch(fromState){
-                case "Removed": return "Reconsidering the Epic";
-                default: return "Moved to the backlog";
-            }
-        case "Active": 
-            switch(fromState){
-                case "Resolved": return "Acceptance tests fail";
-                case "Closed": return "Reintroduced in Scope"
-                default: return "Implementation started";
-            }
-        case "Resolved": 
-            switch(fromState){
-                case "Closed": return "Closed in error";
-                default: return "Features complete";
-            }
-        case "Removed": return "Removed from the backlog";
-        case "Closed": return "Acceptance tests pass";
-    }
-}
-
-function getReasonForStateForFeature(fromState, toState){
-    switch (toState){
-        case "New": 
-            switch(fromState){
-                case "Removed": return "Reconsidering the Feature";
-                default: return "Moved to the backlog";
-            }
-        case "Active": 
-            switch(fromState){
-                case "Resolved": return "Acceptance tests fail";
-                case "Closed": return "Reintroduced in Scope"
-                default: return "Implementation started";
-            }
-        case "Resolved": 
-            switch(fromState){
-                case "Closed": return "Closed in error";
-                default: return "Stories complete";
-            }
-        case "Removed": return "Removed from the backlog";
-        case "Closed": return "Acceptance tests pass";
-    }
-}
-
-function getReasonForStateForTask(fromState, toState){
-    switch (toState){
-        case "New": 
-            switch(fromState){
-                case "Active": return "Work halted";
-                case "Closed": return "Reactivated";
-                case "Removed": return "Reconsidering the Task";
-            }
-        case "Active": 
-            switch(fromState){
-                case "Closed": return "Reactivated"
-                default: return "Work started";
-            }
-        case "Removed": return "Removed from the backlog";
-        case "Closed": return "Completed";
-    }
-}
-
-function getReasonForStateForBug(fromState, toState){
-    switch (toState){
-        case "New": 
-            switch(fromState){
-                case "Active": return "Investigation Complete";
-                case "Resolved": 
-                case "Closed": return "Not fixed";
-            }
-        case "Active": 
-            switch(fromState){
-                case "Resolved": return "Not fixed";
-                case "Closed": return "Regression"
-                default: return "Approved";
-            }
-        case "Resolved": 
-            switch(fromState){
-                case "Closed": return "Resolved in error";
-                default: return "Fixed";
-            }
-        case "Removed": return "Removed from the backlog";
-        case "Closed":  
-            switch(fromState){
-                case "Resolved": return "Verified";
-                default: return "Fixed and verified";
-            }
-    }
-}
-
-function getReasonForStateForIssue(fromState, toState){
-    switch (toState){
-        case "Active": return "Reactivated";
-        case "Closed": return "Issue Resolved";
-    }
-}
-
-function getReasonForStateForTestCase(fromState, toState){
-    switch (toState){
-        case "Design": switch(fromState){
-                case "Closed": return "Reactivated";
-                case "Ready": return "Update Test Case";
-            }
-        case "Ready": switch(fromState){
-                case "Closed": return "Reactivated";
-                default: return "Completed";
-            }
-        case "Closed": return "Obsolete";
-    }
+function getReasonForStateForType(type, fromState, toState){
+    return  stateToReason[type] && 
+            stateToReason[type][toState]&&
+            stateToReason[type][toState][fromState];
 }
 
 function changeStatus(selectedItems, forward){
@@ -197,7 +216,7 @@ function changeStatus(selectedItems, forward){
                         console.log("Cannot change status for this item.");
                         continue;
                     }
-                    var newReason = getReasonForState(type, state, newState);
+                    var newReason = getReasonForStateForType(type, state, newState);
                     if(!newReason) {
                         console.log("Cannot change reason for this item.");
                         continue;
