@@ -75,7 +75,7 @@ var stateToReason = {
                 "Active": "Moved to the backlog" ,
                 "Resolved": "Moved to the backlog",
                 "Closed": "Moved to the backlog",
-                "Removed": "Reconsidering the User Stor"
+                "Removed": "Reconsidering the User Story"
             }, 
             "Active": {
                 "New": "Implementation started",
@@ -217,7 +217,7 @@ function getCommonStatuses(itemTypes){
     return states;
 }
 
-function changeStatus(selectedItems, forward){
+function changeStatus(selectedItems, forward, toState){
     VSS.require(["VSS/Service", "TFS/WorkItemTracking/RestClient"], function (VSS_Service, TFS_Wit_WebApi) {
         var witClient = VSS_Service.getCollectionClient(TFS_Wit_WebApi.WorkItemTrackingHttpClient);
 
@@ -235,7 +235,7 @@ function changeStatus(selectedItems, forward){
                     var reason = item.fields["System.Reason"];
                     console.log( "ID: " + id + ", Type: " + type + ", State: " + state + ", Revision: " + revision);
                     
-                    var newState = forward ? getNextState(type, state) : getPrevState(type, state);
+                    var newState = toState || (forward ? getNextState(type, state) : getPrevState(type, state));
                     if(!newState) {
                         console.log("Cannot change status for this item.");
                         continue;

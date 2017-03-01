@@ -4,20 +4,12 @@ var changeStateMenuHandler = (function () {
     "use strict";
     return {
         getMenuItems: function (actionContext) {
-            var selectedItemsTypes = actionContext.workItemTypeNames;
-            var commonStatuses = getCommonStatuses(selectedItemsTypes);
-
-            return [
-                {
-                    text: "Change state",
-                    "groupId": "modify",
-                    "icon": "static/images/changeStatusAction.png",
-                    childItems:[
+            var ids = actionContext.ids || actionContext.workItemIds;
+            var subMenus = [
                         {
                             text: "Forward",
                             "icon": "static/images/changeStatusForward.png",
                             action: function(actionContext){
-                                var ids = actionContext.ids || actionContext.workItemIds
                                 changeStatus(ids, true);
                             }
                         },
@@ -25,11 +17,32 @@ var changeStateMenuHandler = (function () {
                             text: "Backward",
                             "icon": "static/images/changeStatusBackward.png",
                             action: function(actionContext){
-                                var ids = actionContext.ids || actionContext.workItemIds
                                 changeStatus(ids, false);
                             }
                         }
-                    ]
+                    ];
+            
+            var selectedItemsTypes = actionContext.workItemTypeNames;
+            var commonStatuses = getCommonStatuses(selectedItemsTypes);
+            
+            for(var i = 0; i < commonStatuses.length; ++i){
+                var state = commonStatuses[i];
+
+                subMenus.push({
+                    text: state,
+                    icon: "static/images/status" + state + ".png",
+                    action: function(actionContext){
+                        changeStatus(ids, undefined, this.text);
+                    }
+                });
+            }
+
+            return [
+                {
+                    text: "Change state",
+                    "groupId": "modify",
+                    "icon": "static/images/changeStatusAction.png",
+                    childItems: subMenus
                 }
             ];
         }

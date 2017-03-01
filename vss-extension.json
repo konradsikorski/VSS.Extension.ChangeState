@@ -1,7 +1,7 @@
  {
         "manifestVersion": 1,
         "id": "change-status",
-        "version": "0.1.50",
+        "version": "0.1.57",
         "name": "Change Status",
         "description": "Quickly change work item status from context menu",
         "publisher": "KonradSikorski",
