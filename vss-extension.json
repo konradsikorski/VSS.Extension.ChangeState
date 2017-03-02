@@ -3,7 +3,7 @@
         "id": "change-status",
         "version": "0.3.1",
         "name": "Change State",
-        "description": "Quickly change work item status from context menu",
+        "description": "Change state for many work items at once from context menu",
         "publisher": "KonradSikorski",
         "targets": [
             {
