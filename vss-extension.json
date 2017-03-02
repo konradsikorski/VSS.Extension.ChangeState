@@ -1,7 +1,7 @@
  {
         "manifestVersion": 1,
         "id": "change-status",
-        "version": "0.3.1",
+        "version": "0.3.7",
         "name": "Change State",
         "description": "Change state for many work items at once from context menu",
         "publisher": "KonradSikorski",
@@ -22,20 +22,35 @@
         ],
         "tags": [
             "work item",
+            "status",
             "menu",
-            "status"
+            "backlog"
         ],
+        "links": {
+            "home": {
+                "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState" 
+            },
+            "repository": {
+                "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState" 
+            },
+            "issues": {
+                "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState/issues" 
+            },
+            "support": {
+                "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState/issues" 
+            }
+        },
         "repository": {
             "type": "git",
             "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState"
         },
         "branding": {
-            "color": "rgb(220, 235, 252)",
+            "color": "rgb(140, 195, 28)",
             "theme": "light"
         },
         "content": {
             "details": {
-                "path": "details.md"
+                "path": "readme/details.md"
             }
         },
         "galleryFlags": [
@@ -58,6 +73,9 @@
             }
         ],
         "files": [
+            {
+                "path": "readme", "addressable": true
+            },
             {
                 "path": "static", "addressable": true
             },
