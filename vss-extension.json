@@ -1,8 +1,8 @@
  {
         "manifestVersion": 1,
         "id": "change-status",
-        "version": "0.1.57",
-        "name": "Change Status",
+        "version": "0.3.1",
+        "name": "Change State",
         "description": "Quickly change work item status from context menu",
         "publisher": "KonradSikorski",
         "targets": [
@@ -27,7 +27,7 @@
         ],
         "repository": {
             "type": "git",
-            "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeStatus"
+            "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState"
         },
         "branding": {
             "color": "rgb(220, 235, 252)",
@@ -38,6 +38,9 @@
                 "path": "details.md"
             }
         },
+        "galleryFlags": [
+            "Preview"
+        ],
         "contributions": [
             {
                 "id": "changeStateMenu",
