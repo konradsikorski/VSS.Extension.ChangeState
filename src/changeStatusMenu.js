@@ -5,20 +5,27 @@ var changeStateMenuHandler = (function () {
     return {
         getMenuItems: function (actionContext) {
             var ids = actionContext.ids || actionContext.workItemIds;
-            var subMenus = [
+            var subMenus = 
+                    [
                         {
-                            text: "Forward",
-                            "icon": "static/images/changeStatusForward.png",
-                            action: function(actionContext){
-                                changeStatus(ids, true);
-                            }
-                        },
-                        {
-                            text: "Backward",
-                            "icon": "static/images/changeStatusBackward.png",
-                            action: function(actionContext){
-                                changeStatus(ids, false);
-                            }
+                            text: "Step",
+                            childItems: [
+                                {
+                                    text: "Forward",
+                                    "icon": "static/images/changeStatusForward.png",
+                                    action: function(actionContext){
+                                        changeStatus(ids, true);
+                                    }
+                                },
+                                {
+                                    text: "Backward",
+                                    "icon": "static/images/changeStatusBackward.png",
+                                    action: function(actionContext){
+                                        changeStatus(ids, false);
+                                    }
+                                }
+                            ]
+                            
                         }
                     ];
             
