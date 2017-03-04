@@ -217,6 +217,22 @@ function getCommonStatuses(itemTypes){
     return states;
 }
 
+function getProjectTemplate(actionContext){
+    if( !actionContext.tfsContext || 
+        !actionContext.tfsContext.contextData ||
+        !actionContext.tfsContext.contextData.project) return;
+
+    VSS.require(["VSS/Service", "TFS/Core/RestClient"], function(VSS_Service, TFS_Wit_WebApi){
+        var client = TFS_Wit_WebApi.getClient();
+        client.getProject(actionContext.tfsContext.contextData.project.id, true).then(
+            function(project){
+                console.log(project.capabilities.processTemplate.templateName);
+            });
+
+        projectTemplate = "asd";
+    });
+}
+
 function changeStatus(selectedItems, forward, toState){
     VSS.require(["VSS/Service", "TFS/WorkItemTracking/RestClient"], function (VSS_Service, TFS_Wit_WebApi) {
         var witClient = VSS_Service.getCollectionClient(TFS_Wit_WebApi.WorkItemTrackingHttpClient);
@@ -270,6 +286,10 @@ function changeStatus(selectedItems, forward, toState){
                             console.log('UPDATED: ' + workItem.id);
                         });
                 }
+
+                // VSS.getService(VSS.ServiceIds.Navigation).then(function(navigationService) {
+                //     navigationService.reload();
+                // });
             });                
     });
 }

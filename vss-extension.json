@@ -1,7 +1,7 @@
  {
         "manifestVersion": 1,
         "id": "change-status",
-        "version": "0.3.9",
+        "version": "0.3.15",
         "name": "Change State",
         "description": "Change state for many work items at once from context menu",
         "publisher": "KonradSikorski",
@@ -15,7 +15,8 @@
          },
         "scopes": [
             "vso.work",
-            "vso.work_write"
+            "vso.work_write",
+            "vso.project"
         ],
         "categories": [
             "Plan and track"

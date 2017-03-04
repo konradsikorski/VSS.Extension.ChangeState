@@ -4,6 +4,8 @@ var changeStateMenuHandler = (function () {
     "use strict";
     return {
         getMenuItems: function (actionContext) {
+            //getProjectTemplate(actionContext);
+
             var ids = actionContext.ids || actionContext.workItemIds;
             var subMenus = 
                     [
