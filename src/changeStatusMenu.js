@@ -5,7 +5,7 @@ var changeStateMenuHandler = (function () {
     return {
         getMenuItems: function (actionContext) {
             //getProjectTemplate(actionContext);
-
+            var template = "Agile";
             var ids = actionContext.ids || actionContext.workItemIds;
             var subMenus = 
                     [
@@ -32,7 +32,7 @@ var changeStateMenuHandler = (function () {
                     ];
             
             var selectedItemsTypes = actionContext.workItemTypeNames;
-            var commonStatuses = getCommonStatuses(selectedItemsTypes);
+            var commonStatuses = getCommonStatuses(template, selectedItemsTypes);
             
             for(var i = 0; i < commonStatuses.length; ++i){
                 var state = commonStatuses[i];

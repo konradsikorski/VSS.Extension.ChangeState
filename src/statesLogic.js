@@ -1,5 +1,21 @@
-function getNextState(type, state){
-    var states = statesForType[type];
+function getStateFlow(template, type){
+    var template = stateFlow[template];
+    if(!template) {
+        console.log('WARN: No template "' + type + '" found');
+        return null;
+    }
+
+    var states = template[type];
+    if(!states) {
+        console.log('WARN: No type "' + type + '" found for template "' + template + '"');
+        return null;
+    }
+
+    return states;
+}
+
+function getNextState(template, type, state){
+    var states = getStateFlow(template, type);
 
     var index = states.indexOf(state);
     return (index >= 0 && index + 1 < states.length ) 
@@ -7,8 +23,8 @@ function getNextState(type, state){
         : null;
 }
 
-function getPrevState(type, state){
-    var states = statesForType[type];
+function getPrevState(template, type, state){
+    var states = getStateFlow(template, type);
 
     var index = states.indexOf(state);
     return (index - 1 >= 0 ) 
@@ -16,14 +32,16 @@ function getPrevState(type, state){
         : null;
 }
 
-function getReasonForStateForType(type, fromState, toState){
-    return  stateToReason[type] && 
-            stateToReason[type][toState]&&
-            stateToReason[type][toState][fromState];
+function getReasonForStateForType(template, type, fromState, toState){
+    return  stateToReason[template]&&
+            stateToReason[template][type] && 
+            stateToReason[template][type][toState]&&
+            stateToReason[template][type][toState][fromState];
 }
 
-function getCommonStatuses(itemTypes){
-    var statesForType = stateToReason[itemTypes[0]];
+function getCommonStatuses(template, itemTypes){
+    var templateStates = stateToReason[template];
+    var statesForType = templateStates[itemTypes[0]];
     var states = [];
 
     // init statuses array using first item type
@@ -34,7 +52,7 @@ function getCommonStatuses(itemTypes){
 
     // remove uncommon statuses
     for(var i=1; i<itemTypes.length; ++i){
-        statesForType = stateToReason[itemTypes[i]];
+        statesForType = templateStates[itemTypes[i]];
 
         for(var j=0; j<states.length; ++j){
             if(!statesForType[states[j]]){
@@ -64,6 +82,7 @@ function getProjectTemplate(actionContext, action){
 }
 
 function changeStatus(selectedItems, forward, toState){
+    var template = "Agile";
     VSS.require(["VSS/Service", "TFS/WorkItemTracking/RestClient"], function (VSS_Service, TFS_Wit_WebApi) {
         var witClient = VSS_Service.getCollectionClient(TFS_Wit_WebApi.WorkItemTrackingHttpClient);
 
@@ -81,16 +100,18 @@ function changeStatus(selectedItems, forward, toState){
                     var reason = item.fields["System.Reason"];
                     console.log( "ID: " + id + ", Type: " + type + ", State: " + state + ", Revision: " + revision);
                     
-                    var newState = toState || (forward ? getNextState(type, state) : getPrevState(type, state));
+                    var newState = toState || (forward ? getNextState(template, type, state) : getPrevState(template, type, state));
                     if(!newState) {
                         console.log("Cannot change status for this item.");
                         continue;
                     }
-                    var newReason = getReasonForStateForType(type, state, newState);
+
+                    var newReason = getReasonForStateForType(template, type, state, newState);
                     if(!newReason) {
                         console.log("Cannot change reason for this item.");
                         continue;
                     }
+                    
                     console.log( "New state: " + newState + ", New reason: " + newReason);
 
                     var update = [
