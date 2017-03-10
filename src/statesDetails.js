@@ -11,9 +11,9 @@ var stateFlow = {
     "Scrum": {
         "Epic": ["New", "In Progress", "Done"],
         "Feature": ["New", "In Progress", "Done"],
-        "Product Backlog Item": ["New", "Approved", "Commited", "Done"],
+        "Product Backlog Item": ["New", "Approved", "Committed", "Done"],
         "Task": ["To Do", "In Progress", "Done"],
-        "Bug": ["New", "Approved", "Commited", "Done"],
+        "Bug": ["New", "Approved", "Committed", "Done"],
         "Impediment": ["Open", "Closed"],
         "Test Case": ["Design", "Ready", "Closed"]
     }
@@ -225,16 +225,16 @@ var stateToReason = {
             {
                 "New": {
                     "Approved": "Moved to the backlog" ,
-                    "Commited": "Moved to the backlog",
+                    "Committed": "Moved to the backlog",
                     "Done": "Moved to the backlog",
                     "Removed": "Reconsidering backlog item"
                 }, 
                 "Approved": {
                     "New": "Approved by the Product Owner",
-                    "Commited": "Work stopped",
+                    "Committed": "Work stopped",
                     "Done": "Additional work found"
                 },  
-                "Commited": {
+                "Committed": {
                     "New": "Commitment made by the team",
                     "Approved": "Commitment made by the team",
                     "Done": "Additional work found"
@@ -242,12 +242,12 @@ var stateToReason = {
                 "Done": {
                     "New": "Work finished",
                     "Approved": "Work finished" ,
-                    "Commited": "Work finished" ,
+                    "Committed": "Work finished" ,
                 },
                 "Removed": {
                     "New": "Removed from the backlog",
                     "Approved": "Removed from the backlog" ,
-                    "Commited": "Removed from the backlog" ,
+                    "Committed": "Removed from the backlog" ,
                 }
             },
         "Task": 
@@ -274,16 +274,16 @@ var stateToReason = {
             {
                 "New": {
                     "Approved": "Moved to the backlog" ,
-                    "Commited": "Moved to the backlog",
+                    "Committed": "Moved to the backlog",
                     "Done": "Moved to the backlog",
                     "Removed": "Reconsidering backlog item"
                 }, 
                 "Approved": {
                     "New": "Approved by the Product Owner",
-                    "Commited": "Work stopped",
+                    "Committed": "Work stopped",
                     "Done": "Additional work found"
                 },  
-                "Commited": {
+                "Committed": {
                     "New": "Commitment made by the team",
                     "Approved": "Commitment made by the team",
                     "Done": "Additional work found"
@@ -291,12 +291,12 @@ var stateToReason = {
                 "Done": {
                     "New": "Work finished",
                     "Approved": "Work finished" ,
-                    "Commited": "Work finished" ,
+                    "Committed": "Work finished" ,
                 },
                 "Removed": {
                     "New": "Removed from the backlog",
                     "Approved": "Removed from the backlog" ,
-                    "Commited": "Removed from the backlog" ,
+                    "Committed": "Removed from the backlog" ,
                 }
             },
         "Impediment": 

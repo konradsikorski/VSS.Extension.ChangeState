@@ -1,0 +1,8 @@
+{
+  "name": "vss.extension.changestate",
+  "version": "1.0.0",
+  "dependencies": {
+    "vss-web-extension-sdk": "^2.113.0"
+  },
+  "devDependencies": {}
+}

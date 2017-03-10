@@ -64,14 +64,10 @@ function getCommonStatuses(template, itemTypes){
     return states;
 }
 
-function getProjectTemplate(actionContext, action){
-    if( !actionContext.tfsContext || 
-        !actionContext.tfsContext.contextData ||
-        !actionContext.tfsContext.contextData.project) return;
-
+function getProjectTemplate(projectId, action){
     VSS.require(["VSS/Service", "TFS/Core/RestClient"], function(VSS_Service, TFS_Wit_WebApi){
         var client = TFS_Wit_WebApi.getClient();
-        client.getProject(actionContext.tfsContext.contextData.project.id, true).then(
+        client.getProject(projectId, true).then(
             function(project){
                 var templateName = project.capabilities.processTemplate.templateName;
                 console.log(templateName);

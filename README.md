@@ -28,4 +28,4 @@ In the menu you can find 'Forward' and 'Backword actions. Selecting theme will c
 > New <> Active <> Resolved <> Closed
 
 ### Supported projects
-For now only Agile project template is fully supported. For other templates this extension will not show some specific states.
+For now only Agile and Scrum project templates are fully supported. For other templates this extension will not show some specific states.

@@ -1,11 +1,34 @@
-VSS.init({ usePlatformScripts: true, usePlatformStyles: true });
+VSS.init({ usePlatformScripts: true, usePlatformStyles: true, explicitNotifyLoaded: true });
+
+var projectTemplate;
+
+VSS.getService(VSS.ServiceIds.ExtensionData).then(function(dataService) {
+    var context = VSS.getWebContext();
+    var projectId = context.project.id;
+    var valueKey = "pt_"+projectId;
+
+    dataService.getValue(valueKey, {scopeType: "Default"}).then(function(value) {
+        console.log("User preference value is " + value);
+        projectTemplate = value;
+
+        if(!projectTemplate){
+            getProjectTemplate(projectId, function(templateName){
+                projectTemplate = templateName;
+                VSS.notifyLoadSucceeded()
+                dataService.setValue(valueKey, templateName, {scopeType: "Default"})
+            });
+        }
+        else{
+            VSS.notifyLoadSucceeded();
+        }
+    });
+});
 
 var changeStateMenuHandler = (function () {
     "use strict";
     return {
         getMenuItems: function (actionContext) {
-            //getProjectTemplate(actionContext);
-            var template = "Agile";
+            var template = projectTemplate || "Agile";
             var ids = actionContext.ids || actionContext.workItemIds;
             var subMenus = 
                     [
@@ -39,7 +62,7 @@ var changeStateMenuHandler = (function () {
 
                 subMenus.push({
                     text: state,
-                    icon: "static/images/status" + state + ".png",
+                    icon: "static/images/status" + state.replace(' ', '') + ".png",
                     action: function(actionContext){
                         changeStatus(ids, undefined, this.text);
                     }
