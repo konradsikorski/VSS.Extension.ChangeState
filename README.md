@@ -8,7 +8,7 @@ Change state for many work items at once from context menu.
 1. Select one or more work items on your baclkog or query result
 2. Right click on selected element
 3. From context menu select 'Change State'
-4. Choice new state for your work item
+4. Chooce new state for your work item
 5. Done :)
 
 ![menu](/readme/img/menu.png)
