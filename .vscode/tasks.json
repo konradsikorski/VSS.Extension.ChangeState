@@ -1,10 +1,50 @@
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
+
     "version": "0.1.0",
-    "command": "tfx",
-    "isShellCommand": true,
-    "args": ["tfx extension create --rev-version --output-path package"],
-    "showOutput": "always"
+    "tasks": [
+        {
+            "taskName": "login",
+            "command": "tfx",
+            "isShellCommand": true,
+            "showOutput": "always",
+            "echoCommand": true,
+            "isBuildCommand": false,
+            "args": [
+                "login", "--service-url",  "https://marketplace.visualstudio.com"
+            ]
+        },
+        {
+            "taskName": "package",
+            "command": "tfx",
+            "isShellCommand": true,
+            "showOutput": "always",
+            "echoCommand": true,
+            "isBuildCommand": true,
+            "args": [
+                "extension", "create",  "--rev-version", "--output-path", "package"
+            ]
+        },
+        {
+            "taskName": "publish-version-up",
+            "command": "tfx",
+            "isShellCommand": true,
+            "showOutput": "always",
+            "echoCommand": false,
+            "args": [
+                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com",  "--rev-version", "--output-path", "package"
+            ]
+        },
+        {
+            "taskName": "publish",
+            "command": "tfx",
+            "isShellCommand": true,
+            "showOutput": "always",
+            "echoCommand": false,
+            "args": [
+                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com",  "--output-path", "package"
+            ]
+        }
+    ]
 }
-//tfx extension publish --service-url https://marketplace.visualstudio.com --manifests vss-extension.json --rev-version --output-path package
