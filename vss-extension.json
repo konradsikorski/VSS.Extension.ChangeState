@@ -1,7 +1,7 @@
  {
         "manifestVersion": 1,
         "id": "change-status",
-        "version": "0.5.2",
+        "version": "0.5.6",
         "name": "Change State",
         "description": "Change state for many work items at once from context menu",
         "publisher": "KonradSikorski",

@@ -69,8 +69,8 @@ function getProjectTemplate(projectId, action){
         var client = TFS_Wit_WebApi.getClient();
         client.getProject(projectId, true).then(
             function(project){
-                var templateName = project.capabilities.processTemplate.templateName;
-                console.log(templateName);
+                var templateName = project.capabilities.processTemplate && project.capabilities.processTemplate.templateName;
+                console.log("Project Template: " + templateName);
                 
                 action(templateName);
             });
