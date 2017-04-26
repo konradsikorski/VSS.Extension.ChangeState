@@ -1,8 +1,8 @@
  {
         "manifestVersion": 1,
-        "id": "change-status",
-        "version": "1.1.0",
-        "name": "Change State",
+        "id": "change-status-dev",
+        "version": "1.0.2",
+        "name": "Change State [DEV]",
         "description": "Change state for many work items at once from context menu",
         "publisher": "KonradSikorski",
         "targets": [
@@ -55,7 +55,7 @@
             }
         },
         "galleryFlags": [
-            "Public"
+            "Preview"
         ],
         "contributions": [
             {

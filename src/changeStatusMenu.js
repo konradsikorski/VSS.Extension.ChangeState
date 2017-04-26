@@ -103,7 +103,7 @@ var changeStateMenuHandler = (function () {
     "use strict";
     return {
         getMenuItems: function (actionContext) {
-            var subMenus = (!projectTemplate) 
+            var subMenus = (!projectTemplate || !isProjectTemplateSupported(projectTemplate)) 
                 ? buildSelectProjectTemplateMenu() 
                 : buldStatesMenu(actionContext, projectTemplate);
 

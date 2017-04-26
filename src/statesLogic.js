@@ -1,3 +1,7 @@
+function isProjectTemplateSupported(templateName){
+    return stateFlow[templateName] ? true : false;
+}
+
 function getStateFlow(template, type){
     var template = stateFlow[template];
     if(!template) {
