@@ -29,8 +29,9 @@ and Scrum:
 > New <> Approved <> Committed <> Done
 
 ### Supported projects
-For now only Agile and Scrum project templates are fully supported. For other templates this extension will not show some specific states.
+For now only `Agile` and `Scrum` project templates are supported.
 
 ## Project Template Selection
-For some reason sometimes this extension is not able to get information about your current project template. In this case you will see an option to select the project template like this (you have to set it only once):
+If your project template is different than `Agile` or `Scrum` (or derives from) or extension was not able to get information about your current project template then you will see an option to select the project template like this (you have to set it only once):
+
 ![selectTemplate](/readme/img/selectTemplate.png)
