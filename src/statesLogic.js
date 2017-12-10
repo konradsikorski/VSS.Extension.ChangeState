@@ -81,8 +81,7 @@ function getProjectTemplate(projectId, action){
     });
 }
 
-function changeStatus(selectedItems, forward, toState){
-    var template = "Agile";
+function changeStatus(selectedItems, template, forward, toState) {
     VSS.require(["VSS/Service", "TFS/WorkItemTracking/RestClient"], function (VSS_Service, TFS_Wit_WebApi) {
         var witClient = VSS_Service.getCollectionClient(TFS_Wit_WebApi.WorkItemTrackingHttpClient);
 
@@ -102,17 +101,17 @@ function changeStatus(selectedItems, forward, toState){
                     
                     var newState = toState || (forward ? getNextState(template, type, state) : getPrevState(template, type, state));
                     if(!newState) {
-                        console.log("Cannot change status for this item.");
+                        console.log("Cannot change status for this item. Template: " + template);
                         continue;
                     }
 
                     var newReason = getReasonForStateForType(template, type, state, newState);
                     if(!newReason) {
-                        console.log("Cannot change reason for this item.");
+                        console.log("Cannot change reason for this item. Template: " + template);
                         continue;
                     }
                     
-                    console.log( "New state: " + newState + ", New reason: " + newReason);
+                    console.log( "Tempate" + template + "New state: " + newState + ", New reason: " + newReason);
 
                     var update = [
                         {

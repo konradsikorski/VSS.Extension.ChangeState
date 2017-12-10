@@ -27,13 +27,24 @@
             ]
         },
         {
+            "taskName": "package-dev",
+            "command": "tfx",
+            "isShellCommand": true,
+            "showOutput": "always",
+            "echoCommand": true,
+            "isBuildCommand": true,
+            "args": [
+                "extension", "create",  "--rev-version", "--output-path", "package", "--overrides-file", ".\\vss-extension.DEV.json"
+            ]
+        },
+        {
             "taskName": "publish-version-up",
             "command": "tfx",
             "isShellCommand": true,
             "showOutput": "always",
             "echoCommand": false,
             "args": [
-                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com",  "--rev-version", "--output-path", "package"
+                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com", "--rev-version", "--output-path", "package"
             ]
         },
         {
@@ -43,7 +54,17 @@
             "showOutput": "always",
             "echoCommand": false,
             "args": [
-                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com",  "--output-path", "package"
+                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com", "--output-path", "package"
+            ]
+        },
+        {
+            "taskName": "publish-dev",
+            "command": "tfx",
+            "isShellCommand": true,
+            "showOutput": "always",
+            "echoCommand": false,
+            "args": [
+                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com", "--output-path", "package", "--overrides-file", ".\\vss-extension.DEV.json"
             ]
         }
     ]

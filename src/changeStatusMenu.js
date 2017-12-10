@@ -66,14 +66,14 @@ function buldStatesMenu(actionContext, template){
                             text: "Forward",
                             "icon": "static/images/changeStatusForward.png",
                             action: function(actionContext){
-                                changeStatus(ids, true);
+                                changeStatus(ids, projectTemplate, true);
                             }
                         },
                         {
                             text: "Backward",
                             "icon": "static/images/changeStatusBackward.png",
                             action: function(actionContext){
-                                changeStatus(ids, false);
+                                changeStatus(ids, projectTemplate, false);
                             }
                         }
                     ]
@@ -91,7 +91,7 @@ function buldStatesMenu(actionContext, template){
             text: state,
             icon: "static/images/status" + state.replace(' ', '') + ".png",
             action: function(actionContext){
-                changeStatus(ids, undefined, this.text);
+                changeStatus(ids, projectTemplate, undefined, this.text);
             }
         });
     }
