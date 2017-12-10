@@ -1,4 +1,12 @@
-var stateFlow = {
+namespace MyExtension.ChangeState {
+    class Template {
+        name: string;
+        stateFlow: IDictionaryStringTo<Array<string>>;
+        stateToReason: IDictionaryStringTo<IDictionaryStringTo<IDictionaryStringTo<string>>>;
+    }
+
+    export class TemplatesDesctiptor {
+static stateFlow = {
     "Agile": {
         "Epic": ["New", "Active", "Resolved", "Closed"],
         "Feature": ["New", "Active", "Resolved", "Closed"],
@@ -19,7 +27,7 @@ var stateFlow = {
     }
 };
 
-var stateToReason = {
+static stateToReason = {
     "Agile":{
         "Epic": 
             {
@@ -323,5 +331,7 @@ var stateToReason = {
                     "Ready": "Obsolete"
                 }
             }
+    }
+}
     }
 }

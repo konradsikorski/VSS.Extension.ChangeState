@@ -75,16 +75,25 @@
         ],
         "files": [
             {
-                "path": "readme", "addressable": true
+                "path": "readme", 
+                "addressable": true
             },
             {
-                "path": "static", "addressable": true
+                "path": "static", 
+                "addressable": true
             },
             {
-                "path": "src", "addressable": true
+                "path": "dist",
+                "addressable": true
             },
             {
-                "path": "sdk/scripts", "addressable": true
+                "path": "src", 
+                "addressable": true
+            },
+            {
+                "path": "node_modules/vss-web-extension-sdk/lib",
+                "addressable": true,
+                "packagePath": "lib"
             }
         ]
     }
