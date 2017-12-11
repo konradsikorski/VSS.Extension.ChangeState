@@ -1,9 +1,18 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-
     "version": "0.1.0",
+
     "tasks": [
+        {
+            "taskName": "tsc",
+            "command": "tsc",
+            "isShellCommand": true,
+            "showOutput": "always",
+            // "showOutput": "silent",
+            "echoCommand": true,
+            "isBuildCommand": true,
+            // "args": ["-w", "-p", "."],
+            "problemMatcher": "$tsc-watch"
+        },
         {
             "taskName": "login",
             "command": "tfx",
@@ -21,7 +30,7 @@
             "isShellCommand": true,
             "showOutput": "always",
             "echoCommand": true,
-            "isBuildCommand": true,
+            "isBuildCommand": false,
             "args": [
                 "extension", "create",  "--rev-version", "--output-path", "package"
             ]

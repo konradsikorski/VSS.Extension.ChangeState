@@ -1,8 +1,10 @@
 /// <reference path='statesDetails.ts'/>
 
+// import * as CommonMethods2To4_1 from "VSS/ExtensionManagement/RestClient";
+// import RestClient = require("VSS/ExtensionManagement/RestClient")
+
 namespace MyExtension.ChangeState {
     export class StateLogic {
-
         public static isProjectTemplateSupported(templateName: string): boolean {
             return TemplatesDesctiptor.stateFlow[templateName] ? true : false;
         }
@@ -73,11 +75,12 @@ namespace MyExtension.ChangeState {
             return states;
         }
 
+
         public static getProjectTemplate(projectId: string, action: (templateName: string) => void){
-            VSS.require(["VSS/Service", "TFS/Core/RestClient"], function(VSS_Service, TFS_Wit_WebApi){
+            VSS.require(["VSS/Service", "TFS/Core/RestClient"], (VSS_Service, TFS_Wit_WebApi) => {
                 let client = TFS_Wit_WebApi.getClient();
                 client.getProject(projectId, true).then(
-                    function(project){
+                    (project) => {
                         let templateName = project.capabilities.processTemplate && project.capabilities.processTemplate.templateName;
                         console.log("Project Template: " + templateName);
                         action(templateName);
@@ -86,14 +89,11 @@ namespace MyExtension.ChangeState {
         }
 
     public static changeStatus(selectedItems: Array<number>, template: string, forward: boolean, toState: string): void{
-        //todo: error here, hardcoded template
-        // let template = "Agile";
-
-        VSS.require(["VSS/Service", "TFS/WorkItemTracking/RestClient"], function (VSS_Service, TFS_Wit_WebApi) {
+        VSS.require(["VSS/Service", "TFS/WorkItemTracking/RestClient"], (VSS_Service, TFS_Wit_WebApi) => {
             let witClient = VSS_Service.getCollectionClient(TFS_Wit_WebApi.WorkItemTrackingHttpClient);
 
             witClient.getWorkItems(selectedItems, ["System.State", "System.Reason", "System.WorkItemType"]).then(
-                function(workItems) {
+                (workItems) => {
                     console.log("GET: " + JSON.stringify(workItems));
 
                     for(let i=0; i<workItems.length; ++i){
@@ -104,21 +104,21 @@ namespace MyExtension.ChangeState {
                         let type = item.fields["System.WorkItemType"];
                         let state = item.fields["System.State"];
                         let reason = item.fields["System.Reason"];
-                        console.log( "ID: " + id + ", Type: " + type + ", State: " + state + ", Revision: " + revision);
+                        console.log( `ID: ${id}, Type: ${type}, State: ${state}, Revision: ${revision}`);
                         
                         let newState = toState || (forward ? StateLogic.getNextState(template, type, state) : StateLogic.getPrevState(template, type, state));
                         if(!newState) {
-                            console.log("Cannot change status for this item.");
+                            console.log(`Cannot change status for this item. Template: ${template}`);
                             continue;
                         }
 
                         let newReason = StateLogic.getReasonForStateForType(template, type, state, newState);
                         if(!newReason) {
-                            console.log("Cannot change reason for this item.");
+                            console.log(`Cannot change reason for this item. Template: ${template}`);
                             continue;
                         }
                         
-                        console.log( "New state: " + newState + ", New reason: " + newReason);
+                        console.log( `Template: ${template}, New state: ${newState}, New reason: ${newReason}`);
 
                         let update = [
                             {
@@ -138,8 +138,7 @@ namespace MyExtension.ChangeState {
                             }
                             ];
 
-                        witClient.updateWorkItem(update, id).then(
-                            function(workItem) {
+                        witClient.updateWorkItem(update, id).then( (workItem) => {
                                 console.log('UPDATED: ' + workItem.id);
                             });
                     }

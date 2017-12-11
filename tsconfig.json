@@ -1,10 +1,13 @@
 {
+    "compileOnSave": true,
     "compilerOptions": {
         "module": "amd",
+        "sourceMap": true,
         "moduleResolution": "node",
         "target": "es5",
         "rootDir": "src/",
-        "outDir": "dist/",
+        // "outDir": "dist/",
+        // "watch": true,
         "types": [
             "vss-web-extension-sdk"
         ]	

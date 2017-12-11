@@ -7,8 +7,10 @@
     "vss-web-extension-sdk": "^4.126.2"
   },
   "devDependencies": {
-    "tfx-cli": "^0.3.47",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.2.3",
     "rimraf": "^2.6.2",
+    "tfx-cli": "^0.3.47",
     "typescript": "^2.6.2"
   }
 }

@@ -28,10 +28,14 @@ static stateFlow = {
 };
 
 static stateToReason = {
+    // template
     "Agile":{
+        // work item
         "Epic": 
             {
+                // to state
                 "New": {
+                    // from state | reason
                     "Active": "Moved to the backlog" ,
                     "Resolved": "Moved to the backlog",
                     "Closed": "Moved to the backlog",
