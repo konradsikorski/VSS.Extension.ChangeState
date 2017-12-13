@@ -1,9 +1,9 @@
 namespace MyExtension.ChangeState {
-    class Template {
-        name: string;
-        stateFlow: IDictionaryStringTo<Array<string>>;
-        stateToReason: IDictionaryStringTo<IDictionaryStringTo<IDictionaryStringTo<string>>>;
-    }
+    // class Template {
+    //     name: string;
+    //     stateFlow: IDictionaryStringTo<Array<string>>;
+    //     stateToReason: IDictionaryStringTo<IDictionaryStringTo<IDictionaryStringTo<string>>>;
+    // }
 
     export class TemplatesDesctiptor {
 static stateFlow = {

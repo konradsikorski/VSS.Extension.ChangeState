@@ -1,8 +1,5 @@
- {
-        "id": "change-status-dev",
-        "name": "Change State [DEV]",
-        "public": false,
-        "galleryFlags": [
-            "Preview"
-        ]
-    }
+{
+    "id": "change-status-dev",
+    "name": "Change State [DEV]",
+    "public": false
+}

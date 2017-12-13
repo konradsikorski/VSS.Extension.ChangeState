@@ -4,12 +4,12 @@ namespace MyExtension.ChangeState {
     export class MenuHandler{
         projectTemplate : string;
 
-        construtor()
+        constructor()
         {
             this.getCurrentProjectTemplate();
         }
 
-        getCurrentProjectTemplate(){
+        private getCurrentProjectTemplate(){
             return VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData).then((dataService) => {
                 let context = VSS.getWebContext();
                 let projectId = context.project.id;
@@ -35,7 +35,7 @@ namespace MyExtension.ChangeState {
             });
         }
 
-        selectProjectTemplate(templateName: string){
+        private selectProjectTemplate(templateName: string){
             return VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData)
                 .then(function(dataService) {
                     let context = VSS.getWebContext();
@@ -47,7 +47,7 @@ namespace MyExtension.ChangeState {
                 });
         }
 
-        buildSelectProjectTemplateMenu(): IContributedMenuItem[]{
+        private buildSelectProjectTemplateMenu(): IContributedMenuItem[]{
             return [
                 {
                     text: "What is your project template?",
@@ -69,7 +69,7 @@ namespace MyExtension.ChangeState {
             ];
         }
 
-        buldStatesMenu(actionContext: any, template: string) : IContributedMenuItem[]{
+        private buildStatesMenu(actionContext: any, template: string) : IContributedMenuItem[]{
             let ids = actionContext.ids || actionContext.workItemIds;
             let subMenus = new Array<IContributedMenuItem>();
 
@@ -112,12 +112,12 @@ namespace MyExtension.ChangeState {
             return subMenus;
         }
 
-        changeStateMenuHandler(context: any): IContributedMenuSource {
+        changeStateMenuHandler = (context: any): IContributedMenuSource => {
             return {
-                getMenuItems: function (actionContext: any) : Array<IContributedMenuItem> {
+                getMenuItems: (actionContext: any) : Array<IContributedMenuItem> => {
                     let subMenus = (!this.projectTemplate || !StateLogic.isProjectTemplateSupported(this.projectTemplate)) 
                         ? this.buildSelectProjectTemplateMenu() 
-                        : this.buldStatesMenu(actionContext, this.projectTemplate);
+                        : this.buildStatesMenu(actionContext, this.projectTemplate);
 
                     return new Array<IContributedMenuItem>(
                         {
