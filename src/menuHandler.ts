@@ -3,15 +3,38 @@
 namespace MyExtension.ChangeState {
     export class MenuHandler{
         projectTemplate : string;
-        // test: PromiseLike<void>;
+        getCurrentProjectTemplatePromise: PromiseLike<void>;
 
-        // constructor()
-        // {
-        //     // this.test = this.getCurrentProjectTemplate();
-        // }
+        constructor()
+        {
+            this.getCurrentProjectTemplatePromise = this.getCurrentProjectTemplate();
+        }
+        
+        changeStateMenuHandler = (context: any) => {
+            return this.getCurrentProjectTemplatePromise
+            .then(() =>{ return {
+                getMenuItems: (actionContext: any) : Array<IContributedMenuItem> => {
+                    let subMenus = (!this.projectTemplate || !StateLogic.isProjectTemplateSupported(this.projectTemplate)) 
+                                ? this.buildSelectProjectTemplateMenu() 
+                                : this.buildStatesMenu(actionContext, this.projectTemplate);
+
+                    return new Array<IContributedMenuItem>(
+                        {
+                            text: "Change state",
+                            groupId: "modify",
+                            icon: "static/images/changeStatusAction.png",
+                            childItems: subMenus,
+                        }
+                    );
+                }
+            };});
+            
+        }
 
         private getCurrentProjectTemplate() : PromiseLike<void> {
-            return VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData).then((dataService) => {
+            return VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData)
+            
+            .then((dataService) => {
                 let context = VSS.getWebContext();
                 let projectId = context.project.id;
                 let valueKey = "pt_"+projectId;
@@ -112,43 +135,6 @@ namespace MyExtension.ChangeState {
             return subMenus;
         }
 
-        changeStateMenuHandler = (context: any): IContributedMenuSource => {
-            console.info("1");
-            return {
-                getMenuItems: (actionContext: any) : Array<IContributedMenuItem> => {
-                    console.info("2");
-                    return new Array<IContributedMenuItem>(
-                        {
-                            text: "Change state",
-                            groupId: "modify",
-                            icon: "static/images/changeStatusAction.png",
-                            // childItems: items,
-                            childItems: null
-                        }
-                    );
-
-                    // let items = this.test
-                    //     .then(() =>{
-                    //         let subMenus = (!this.projectTemplate || !StateLogic.isProjectTemplateSupported(this.projectTemplate)) 
-                    //                     ? this.buildSelectProjectTemplateMenu() 
-                    //                     : this.buildStatesMenu(actionContext, this.projectTemplate);
-
-                    //                     return subMenus;
-                    //     });
-
-                    // let items = this.getCurrentProjectTemplate()
-                    //     .then(() =>{
-                    //         return [
-                    //             <IContributedMenuItem>{
-                    //                 text: "Forward",
-                    //                 icon: "static/images/changeStatusForward.png",
-                    //             }
-                    //         ];
-                    //     });
-
-                }
-            };
-            
-        }
+        
     }      
 }
