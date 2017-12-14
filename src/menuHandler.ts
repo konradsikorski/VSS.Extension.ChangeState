@@ -3,13 +3,14 @@
 namespace MyExtension.ChangeState {
     export class MenuHandler{
         projectTemplate : string;
+        // test: PromiseLike<void>;
 
-        constructor()
-        {
-            this.getCurrentProjectTemplate();
-        }
+        // constructor()
+        // {
+        //     // this.test = this.getCurrentProjectTemplate();
+        // }
 
-        private getCurrentProjectTemplate(){
+        private getCurrentProjectTemplate() : PromiseLike<void> {
             return VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData).then((dataService) => {
                 let context = VSS.getWebContext();
                 let projectId = context.project.id;
@@ -79,15 +80,14 @@ namespace MyExtension.ChangeState {
                     {
                         text: "Forward",
                         icon: "static/images/changeStatusForward.png",
-                        action: function(actionContext: any){
+                        action: (actionContext: any) => {
                             StateLogic.changeStatus(ids, this.projectTemplate, true, null);
                         },
-
                     },
                     {
                         text: "Backward",
                         icon: "static/images/changeStatusBackward.png",
-                        action: function(actionContext: any){
+                        action: (actionContext: any) => {
                             StateLogic.changeStatus(ids, this.projectTemplate, false, null);
                         }
                     }
@@ -103,8 +103,8 @@ namespace MyExtension.ChangeState {
                 subMenus.push( {
                     text: state,
                     icon: `static/images/status${state.replace(' ', '')}.png`,
-                    action: function(actionContext: any){
-                        StateLogic.changeStatus(ids, this.projectTemplate, undefined, this.text);
+                    action: (actionContext: any) => {
+                        StateLogic.changeStatus(ids, this.projectTemplate, undefined, state);
                     }
                 });
             }
@@ -113,22 +113,42 @@ namespace MyExtension.ChangeState {
         }
 
         changeStateMenuHandler = (context: any): IContributedMenuSource => {
+            console.info("1");
             return {
                 getMenuItems: (actionContext: any) : Array<IContributedMenuItem> => {
-                    let subMenus = (!this.projectTemplate || !StateLogic.isProjectTemplateSupported(this.projectTemplate)) 
-                        ? this.buildSelectProjectTemplateMenu() 
-                        : this.buildStatesMenu(actionContext, this.projectTemplate);
-
+                    console.info("2");
                     return new Array<IContributedMenuItem>(
                         {
                             text: "Change state",
                             groupId: "modify",
                             icon: "static/images/changeStatusAction.png",
-                            childItems: subMenus
+                            // childItems: items,
+                            childItems: null
                         }
                     );
+
+                    // let items = this.test
+                    //     .then(() =>{
+                    //         let subMenus = (!this.projectTemplate || !StateLogic.isProjectTemplateSupported(this.projectTemplate)) 
+                    //                     ? this.buildSelectProjectTemplateMenu() 
+                    //                     : this.buildStatesMenu(actionContext, this.projectTemplate);
+
+                    //                     return subMenus;
+                    //     });
+
+                    // let items = this.getCurrentProjectTemplate()
+                    //     .then(() =>{
+                    //         return [
+                    //             <IContributedMenuItem>{
+                    //                 text: "Forward",
+                    //                 icon: "static/images/changeStatusForward.png",
+                    //             }
+                    //         ];
+                    //     });
+
                 }
             };
+            
         }
     }      
 }
