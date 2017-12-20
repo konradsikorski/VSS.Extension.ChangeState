@@ -114,7 +114,6 @@ export class StateLogic {
                     
                     console.log( `Template: ${template}, New state: ${newState}, New reason: ${newReason}`);
 
-                    let client = TFS_Wit_Client.getClient();
                     let update = [
                         {
                             "op": "test",
@@ -132,10 +131,6 @@ export class StateLogic {
                             "value": newReason
                         }
                         ];
-
-                    client.updateWorkItem(update, id).then( (workItem) => {
-                        console.log('UPDATED: ' + workItem.id);
-                    });
                         
                     witClient.updateWorkItem(update, id).then( (workItem) => {
                         console.log('UPDATED: ' + workItem.id);
