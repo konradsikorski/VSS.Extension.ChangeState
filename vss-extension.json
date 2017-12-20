@@ -1,95 +1,99 @@
  {
-        "manifestVersion": 1,
-        "id": "change-status",
-        "version": "1.2.39",
-        "name": "Change State",
-        "description": "Change state for many work items at once from context menu",
-        "publisher": "KonradSikorski",
-        "targets": [
-            {
-                "id": "Microsoft.VisualStudio.Services"
-            }
-        ],
-        "icons": {
-            "default": "static/images/logo.png"
-         },
-        "scopes": [
-            "vso.work",
-            "vso.work_write",
-            "vso.project"
-        ],
-        "categories": [
-            "Plan and track"
-        ],
-        "tags": [
-            "work item",
-            "status",
-            "menu",
-            "backlog"
-        ],
-        "links": {
-            "home": {
-                "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState" 
-            },
-            "repository": {
-                "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState" 
-            },
-            "issues": {
-                "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState/issues" 
-            },
-            "support": {
-                "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState/issues" 
-            }
+    "manifestVersion": 1,
+    "id": "change-status",
+    "version": "1.2.61",
+    "name": "Change State",
+    "description": "Change state for many work items at once from context menu",
+    "publisher": "KonradSikorski",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "icons": {
+        "default": "static/images/logo.png"
+        },
+    "scopes": [
+        "vso.work",
+        "vso.work_write",
+        "vso.project"
+    ],
+    "categories": [
+        "Plan and track"
+    ],
+    "tags": [
+        "work item",
+        "status",
+        "menu",
+        "backlog"
+    ],
+    "links": {
+        "home": {
+            "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState" 
         },
         "repository": {
-            "type": "git",
-            "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState"
+            "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState" 
         },
-        "branding": {
-            "color": "rgb(140, 195, 28)",
-            "theme": "light"
+        "issues": {
+            "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState/issues" 
         },
-        "content": {
-            "details": {
-                "path": "readme/details.md"
+        "support": {
+            "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState/issues" 
+        }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/konradsikorski/VSS.Extension.ChangeState"
+    },
+    "branding": {
+        "color": "rgb(140, 195, 28)",
+        "theme": "light"
+    },
+    "content": {
+        "details": {
+            "path": "readme/details.md"
+        }
+    },
+    "galleryFlags": [
+        "Public"
+    ],
+    "contributions": [
+        {
+            "id": "changeStateMenu",
+            "type": "ms.vss-web.action-provider",
+            "description": "Change state selected items",
+            "targets": [
+                "ms.vss-work-web.backlog-item-menu",
+                "ms.vss-work-web.work-item-context-menu"
+            ],
+            "properties": {
+                "name": "Change state",
+                "uri": "_changeStatusMenu.html",
+                "registeredObjectId": "changeStateMenu"
             }
+        }
+    ],
+    "files": [
+        {
+            "path": "readme", 
+            "addressable": true
         },
-        "galleryFlags": [
-            "Public"
-        ],
-        "contributions": [
-            {
-                "id": "changeStateMenu",
-                "type": "ms.vss-web.action-provider",
-                "description": "Change state selected items",
-                "targets": [
-                    "ms.vss-work-web.backlog-item-menu",
-                    "ms.vss-work-web.work-item-context-menu"
-                ],
-                "properties": {
-                    "name": "Change state",
-                    "uri": "static/changeStatusMenu.html",
-                    "registeredObjectId": "changeStateMenu"
-                }
-            }
-        ],
-        "files": [
-            {
-                "path": "readme", 
-                "addressable": true
-            },
-            {
-                "path": "static", 
-                "addressable": true
-            },
-            {
-                "path": "src", 
-                "addressable": true
-            },
-            {
-                "path": "node_modules/vss-web-extension-sdk/lib",
-                "addressable": true,
-                "packagePath": "lib"
-            }
-        ]
-    }
+        {
+            "path": "static", 
+            "addressable": true
+        },
+        {
+            "path": "build", 
+            "addressable": true
+        },
+        {
+            "path": "node_modules/vss-web-extension-sdk/lib",
+            "addressable": true,
+            "packagePath": "lib"
+        },
+        {
+            "path": "_changeStatusMenu.html",
+            "addressable": true
+        }
+    ]
+}

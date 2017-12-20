@@ -1,31 +1,24 @@
-namespace MyExtension.ChangeState {
-    // class Template {
-    //     name: string;
-    //     stateFlow: IDictionaryStringTo<Array<string>>;
-    //     stateToReason: IDictionaryStringTo<IDictionaryStringTo<IDictionaryStringTo<string>>>;
-    // }
-
-    export class TemplatesDesctiptor {
-static stateFlow = {
-    "Agile": {
-        "Epic": ["New", "Active", "Resolved", "Closed"],
-        "Feature": ["New", "Active", "Resolved", "Closed"],
-        "User Story": ["New", "Active", "Resolved", "Closed"],
-        "Task": ["New", "Active", "Closed"],
-        "Bug": ["New", "Active", "Resolved", "Closed"],
-        "Issue": ["Active", "Closed"],
-        "Test Case": ["Design", "Ready", "Closed"]
-    },
-    "Scrum": {
-        "Epic": ["New", "In Progress", "Done"],
-        "Feature": ["New", "In Progress", "Done"],
-        "Product Backlog Item": ["New", "Approved", "Committed", "Done"],
-        "Task": ["To Do", "In Progress", "Done"],
-        "Bug": ["New", "Approved", "Committed", "Done"],
-        "Impediment": ["Open", "Closed"],
-        "Test Case": ["Design", "Ready", "Closed"]
-    }
-};
+export class TemplatesDesctiptor {
+    static stateFlow = {
+        "Agile": {
+            "Epic": ["New", "Active", "Resolved", "Closed"],
+            "Feature": ["New", "Active", "Resolved", "Closed"],
+            "User Story": ["New", "Active", "Resolved", "Closed"],
+            "Task": ["New", "Active", "Closed"],
+            "Bug": ["New", "Active", "Resolved", "Closed"],
+            "Issue": ["Active", "Closed"],
+            "Test Case": ["Design", "Ready", "Closed"]
+        },
+        "Scrum": {
+            "Epic": ["New", "In Progress", "Done"],
+            "Feature": ["New", "In Progress", "Done"],
+            "Product Backlog Item": ["New", "Approved", "Committed", "Done"],
+            "Task": ["To Do", "In Progress", "Done"],
+            "Bug": ["New", "Approved", "Committed", "Done"],
+            "Impediment": ["Open", "Closed"],
+            "Test Case": ["Design", "Ready", "Closed"]
+        }
+    };
 
 static stateToReason = {
     // template
@@ -338,4 +331,4 @@ static stateToReason = {
     }
 }
     }
-}
+//}

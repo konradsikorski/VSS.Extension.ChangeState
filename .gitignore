@@ -3,3 +3,4 @@
 debug.log
 /src/*.js
 /src/*.js.map
+/build

@@ -2,14 +2,20 @@
     "compileOnSave": true,
     "compilerOptions": {
         "module": "amd",
-        "sourceMap": true,
         "moduleResolution": "node",
         "target": "es5",
-        "rootDir": "src/",
-        // "outDir": "dist/",
-        "watch": true,
+        "sourceMap": false,
+        "outFile": "./src/app.js",
+        "removeComments": true,
+        // "noImplicitAny": true,
+        // "outDir": "build/",
+        // "watch": true,
+        "rootDir": "./",
         "types": [
             "vss-web-extension-sdk"
         ]	
-    }
+    },
+    "include": [
+        "src/**/*"
+    ],
 }

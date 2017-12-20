@@ -1,5 +1,11 @@
 {
     "id": "change-status-dev",
     "name": "Change State [DEV]",
-    "public": false
+    "public": false,
+    "files": [
+        {
+            "path": "src", 
+            "addressable": true
+        }
+    ]
 }

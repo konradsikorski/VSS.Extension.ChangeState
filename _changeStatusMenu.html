@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <script src="lib/VSS.SDK.min.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            // Initialize framework 
+            VSS.init({
+                explicitNotifyLoaded: true,
+                usePlatformScripts: true,
+                configureModuleLoader: true
+            });
+            
+            // Load main entry point for extension
+            VSS.require(["src/app"], function () {
+                // Loading succeeded
+                VSS.notifyLoadSucceeded();
+            });
+        </script>
+    </body>
+</html>
