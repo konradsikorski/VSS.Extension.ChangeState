@@ -14,30 +14,26 @@ export class MenuHandler{
     }
 
     changeStateMenuHandler = (context: any) => {
-        return this.getCurrentProjectTemplatePromise
-            .then(() =>{
-                return {
-                    getMenuItems: (actionContext: any) : Array<IContributedMenuItem> => {
-                        let subMenus = 
-                        //      this.getCurrentProjectTemplate()
-                        //     .then(() => { 
-                                // return 
+        return {
+            getMenuItems: (actionContext: any)  => {
+                return this.getCurrentProjectTemplatePromise
+                    .then(() => {
+                            let subMenus = 
                                 (!this.projectTemplate || !StateLogic.isProjectTemplateSupported(this.projectTemplate)) 
-                                            ? this.buildSelectProjectTemplateMenu() 
-                                            : this.buildStatesMenu(actionContext, this.projectTemplate);
-                        //         });
-                        
-                        return new Array<IContributedMenuItem>(
-                            {
-                                text: "Change state",
-                                groupId: "modify",
-                                icon: "static/images/changeStatusAction.png",
-                                childItems: subMenus,
-                            }
-                        );
+                                    ? this.buildSelectProjectTemplateMenu() 
+                                    : this.buildStatesMenu(actionContext, this.projectTemplate);
+                            
+                            return new Array<IContributedMenuItem>(
+                                {
+                                    text: "Change state",
+                                    groupId: "modify",
+                                    icon: "static/images/changeStatusAction.png",
+                                    childItems: subMenus,
+                                }
+                            );
+                        });
                     }
-                };
-            });
+            };
     }
 
     private getCurrentProjectTemplate() : PromiseLike<void> {            
@@ -45,17 +41,16 @@ export class MenuHandler{
             .then((dataService: VSS_Extension_Service.ExtensionDataService) => {
                 let context = VSS.getWebContext();
                 let projectId = context.project.id;
-                let valueKey = "pt_"+projectId;
+                let valueKey = this.getStoreKey(projectId);
             
                 return dataService.getValue(valueKey, {scopeType: "Default"}).then((projectTemplateValue: string) => {
-                    console.log("User preference value is: " + projectTemplateValue);                 
+                    console.log("template name from cache: " + projectTemplateValue);                 
             
                     if(!projectTemplateValue){
                         StateLogic.getProjectTemplate(projectId, (templateName: string) => {
+                            this.saveProjectTemplate(templateName, dataService);
                             //todo: this code should be Promise, now it is wrong because this callback will be call after the whole promise complete
                             this.projectTemplate = templateName;
-                            dataService.setValue(valueKey, templateName, {scopeType: "Default"});
-                            console.log("template saved to store: " + templateName);
                         });
                     }
 
@@ -70,13 +65,25 @@ export class MenuHandler{
     private selectProjectTemplate(templateName: string){
         return VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData)
             .then( dataService =>{
-                let context = VSS.getWebContext();
-                let projectId = context.project.id;
-                let valueKey = "pt_"+projectId;
-
-                dataService.setValue(valueKey, templateName, {scopeType: "Default"});
+                this.saveProjectTemplate(templateName, dataService);
                 this.projectTemplate = templateName;
             });
+    }
+
+    private saveProjectTemplate(templateName: string, dataService: IExtensionDataService): void{
+        let valueKey = this.getStoreKey();
+        dataService.setValue(valueKey, templateName, {scopeType: "Default"});
+        console.log("template name saved to cache: " + templateName);
+    }
+
+    private getStoreKey(projectId: string = null) : string{
+        if(!projectId) {
+            let context = VSS.getWebContext();
+            projectId = context.project.id;
+        }
+
+        let valueKey = "pt_"+projectId;
+        return valueKey;
     }
 
     private buildSelectProjectTemplateMenu(): IContributedMenuItem[]{
@@ -140,7 +147,6 @@ export class MenuHandler{
             });
         }
 
-        console.debug("buildStatesMenu completed");
         return subMenus;
     }
 }      
