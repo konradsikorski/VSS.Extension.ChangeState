@@ -72,18 +72,6 @@ export class StateLogic {
         return states;
     }
 
-    public static getProjectTemplate(projectId: string, action: (templateName: string) => void){
-        VSS.require(["TFS/Core/RestClient"], (TFS_Wit_WebApi: any) => {
-            let client = TFS_Wit_WebApi.getClient();
-            client.getProject(projectId, true).then(
-                (project: any) => {
-                    let templateName = project.capabilities.processTemplate && project.capabilities.processTemplate.templateName;
-                    console.log("Project Template: " + templateName);
-                    action(templateName);
-                });
-        });
-    }
-
     public static changeStatus(selectedItems: Array<number>, template: string, forward: boolean, toState: string): void{
         let witClient = TFS_Wit_Client.getClient();
         witClient.getWorkItems(selectedItems, ["System.State", "System.Reason", "System.WorkItemType"])
