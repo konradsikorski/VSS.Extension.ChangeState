@@ -9,7 +9,7 @@
         "removeComments": true,
         // "noImplicitAny": true,
         // "outDir": "build/",
-        // "watch": true,
+        "watch": true,
         "rootDir": "./",
         "types": [
             "vss-web-extension-sdk"

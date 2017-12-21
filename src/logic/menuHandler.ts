@@ -12,16 +12,21 @@ export class MenuHandler{
     {
         this.getCurrentProjectTemplatePromise = this.getCurrentProjectTemplate();
     }
-    
+
     changeStateMenuHandler = (context: any) => {
         return this.getCurrentProjectTemplatePromise
-            .then(() =>{ 
+            .then(() =>{
                 return {
                     getMenuItems: (actionContext: any) : Array<IContributedMenuItem> => {
-                        let subMenus = (!this.projectTemplate || !StateLogic.isProjectTemplateSupported(this.projectTemplate)) 
-                                    ? this.buildSelectProjectTemplateMenu() 
-                                    : this.buildStatesMenu(actionContext, this.projectTemplate);
-
+                        let subMenus = 
+                        //      this.getCurrentProjectTemplate()
+                        //     .then(() => { 
+                                // return 
+                                (!this.projectTemplate || !StateLogic.isProjectTemplateSupported(this.projectTemplate)) 
+                                            ? this.buildSelectProjectTemplateMenu() 
+                                            : this.buildStatesMenu(actionContext, this.projectTemplate);
+                        //         });
+                        
                         return new Array<IContributedMenuItem>(
                             {
                                 text: "Change state",
@@ -37,34 +42,34 @@ export class MenuHandler{
 
     private getCurrentProjectTemplate() : PromiseLike<void> {            
         return VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData)
-        .then((dataService: VSS_Extension_Service.ExtensionDataService) => {
-            let context = VSS.getWebContext();
-            let projectId = context.project.id;
-            let valueKey = "pt_"+projectId;
-        
-            return dataService.getValue(valueKey, {scopeType: "Default"}).then((projectTemplateValue: string) => {
-                console.log("User preference value is " + projectTemplateValue);                 
-        
-                if(!projectTemplateValue){
-                    StateLogic.getProjectTemplate(projectId, (templateName: string) => {
-                        projectTemplateValue = templateName;
-                        VSS.notifyLoadSucceeded();
-                        dataService.setValue(valueKey, templateName, {scopeType: "Default"});
-                    });
-                }
+            .then((dataService: VSS_Extension_Service.ExtensionDataService) => {
+                let context = VSS.getWebContext();
+                let projectId = context.project.id;
+                let valueKey = "pt_"+projectId;
+            
+                return dataService.getValue(valueKey, {scopeType: "Default"}).then((projectTemplateValue: string) => {
+                    console.log("User preference value is: " + projectTemplateValue);                 
+            
+                    if(!projectTemplateValue){
+                        StateLogic.getProjectTemplate(projectId, (templateName: string) => {
+                            //todo: this code should be Promise, now it is wrong because this callback will be call after the whole promise complete
+                            this.projectTemplate = templateName;
+                            dataService.setValue(valueKey, templateName, {scopeType: "Default"});
+                            console.log("template saved to store: " + templateName);
+                        });
+                    }
 
-                return projectTemplateValue;
+                    return projectTemplateValue;
+                });
+            })
+            .then( projectTemplate => {
+                this.projectTemplate = projectTemplate;
             });
-        })
-        .then( projectTemplate => {
-            this.projectTemplate = projectTemplate;
-            VSS.notifyLoadSucceeded();
-        });
     }
 
     private selectProjectTemplate(templateName: string){
         return VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData)
-            .then(function(dataService) {
+            .then( dataService =>{
                 let context = VSS.getWebContext();
                 let projectId = context.project.id;
                 let valueKey = "pt_"+projectId;
@@ -81,13 +86,13 @@ export class MenuHandler{
                 childItems: [
                     {
                         text: "Agile",
-                        action: function(actionContext: any){
+                        action: (actionContext: any) => {
                             this.selectProjectTemplate("Agile");
                         }
                     },
                     {
                         text: "Scrum",
-                        action: function(actionContext: any){
+                        action: (actionContext: any) => {
                             this.selectProjectTemplate("Scrum");
                         }
                     }
@@ -135,6 +140,7 @@ export class MenuHandler{
             });
         }
 
+        console.debug("buildStatesMenu completed");
         return subMenus;
     }
 }      

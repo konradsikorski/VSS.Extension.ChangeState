@@ -1,7 +1,7 @@
  {
     "manifestVersion": 1,
     "id": "change-status",
-    "version": "1.2.61",
+    "version": "1.2.85",
     "name": "Change State",
     "description": "Change state for many work items at once from context menu",
     "publisher": "KonradSikorski",
@@ -59,7 +59,7 @@
     ],
     "contributions": [
         {
-            "id": "changeStateMenu",
+            "id": "change-status.contextmenu",
             "type": "ms.vss-web.action-provider",
             "description": "Change state selected items",
             "targets": [
@@ -67,9 +67,8 @@
                 "ms.vss-work-web.work-item-context-menu"
             ],
             "properties": {
-                "name": "Change state",
-                "uri": "_changeStatusMenu.html",
-                "registeredObjectId": "changeStateMenu"
+                "group": "contributed",
+                "uri": "_changeStatusMenu.html"
             }
         }
     ],
@@ -83,7 +82,7 @@
             "addressable": true
         },
         {
-            "path": "build", 
+            "path": "src", 
             "addressable": true
         },
         {
