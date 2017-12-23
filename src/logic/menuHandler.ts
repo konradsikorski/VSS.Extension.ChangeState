@@ -12,13 +12,14 @@ export class MenuHandler{
     constructor()
     {
         this.getCurrentProjectTemplatePromise = 
-            this.templateLogic.getCurrentProjectTemplate(this.projectTemplate).then(templateName => {
-                this.projectTemplate = templateName
-            });
+            this.templateLogic.getCurrentProjectTemplate()
+                .then(templateName => {
+                    this.projectTemplate = templateName
+                });
     }
 
-    changeStateMenuHandler = (context: any) => {
-        return {
+    changeStateMenuHandler = (context: any) : IContributedMenuSource => {
+        return <IContributedMenuSource> {
             getMenuItems: (actionContext: any)  => {
                 return this.getCurrentProjectTemplatePromise
                     .then(() => {

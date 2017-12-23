@@ -9,13 +9,13 @@ export class StateLogic {
     public static getStateFlow(templateName: string, type: string) : Array<string> {
         let template = TemplatesDesctiptor.stateFlow[templateName];
         if(!template) {
-            console.log('WARN: No template "' + type + '" found');
+            console.log(`WARN: No template "${type}" found`);
             return null;
         }
 
         let states = <Array<string>>template[type];
         if(!states) {
-            console.log('WARN: No type "' + type + '" found for template "' + template + '"');
+            console.log(`WARN: No type "${type}" found for template "${template}"`);
             return null;
         }
 
@@ -121,7 +121,7 @@ export class StateLogic {
                         ];
                         
                     witClient.updateWorkItem(update, id).then( (workItem) => {
-                        console.log('UPDATED: ' + workItem.id);
+                        console.log('Work item UPDATED: ' + workItem.id);
                     });
                 }
 
