@@ -1,11 +1,14 @@
 import {StateLogic} from "./statesLogic"
 import {TemplateLogic} from "./templateLogic"
+import {TemplateDefinitions} from "./templateDefinitions"
+import {Template} from "./templates/core"
 
 import TFS_Wit_Services = require("TFS/WorkItemTracking/Services");
 import VSS_Extension_Service = require("VSS/SDK/Services/ExtensionData");
 
 export class MenuHandler{
-    projectTemplate : string;
+    projectTemplate : Template;
+    templateDefinitions: TemplateDefinitions = new TemplateDefinitions();
     templateLogic: TemplateLogic = new TemplateLogic();
     getCurrentProjectTemplatePromise: PromiseLike<void>;
 
@@ -14,7 +17,10 @@ export class MenuHandler{
         this.getCurrentProjectTemplatePromise = 
             this.templateLogic.getCurrentProjectTemplate()
                 .then(templateName => {
-                    this.projectTemplate = templateName
+                    this.templateDefinitions.getTemplate(templateName)
+                    .then( template => {
+                      this.projectTemplate = template;  
+                    });
                 });
     }
 
@@ -24,7 +30,7 @@ export class MenuHandler{
                 return this.getCurrentProjectTemplatePromise
                     .then(() => {
                             let subMenus = 
-                                (!this.projectTemplate || !StateLogic.isProjectTemplateSupported(this.projectTemplate)) 
+                                (!this.projectTemplate) 
                                     ? this.buildSelectProjectTemplateMenu() 
                                     : this.buildStatesMenu(actionContext, this.projectTemplate);
                             
@@ -63,29 +69,9 @@ export class MenuHandler{
         ];
     }
 
-    private buildStatesMenu(actionContext: any, template: string) : IContributedMenuItem[]{
+    private buildStatesMenu(actionContext: any, template: Template) : IContributedMenuItem[]{
         let ids = actionContext.ids || actionContext.workItemIds;
         let subMenus = new Array<IContributedMenuItem>();
-
-        subMenus.push({
-            text: "Step",
-            childItems: [
-                {
-                    text: "Forward",
-                    icon: "static/images/changeStatusForward.png",
-                    action: (actionContext: any) => {
-                        StateLogic.changeStatus(ids, this.projectTemplate, true, null);
-                    },
-                },
-                {
-                    text: "Backward",
-                    icon: "static/images/changeStatusBackward.png",
-                    action: (actionContext: any) => {
-                        StateLogic.changeStatus(ids, this.projectTemplate, false, null);
-                    }
-                }
-            ]
-        });
         
         let selectedItemsTypes = actionContext.workItemTypeNames;
         let commonStatuses = StateLogic.getCommonStatuses(template, selectedItemsTypes);
@@ -97,7 +83,7 @@ export class MenuHandler{
                 text: state,
                 icon: `static/images/status${state.replace(' ', '')}.png`,
                 action: (actionContext: any) => {
-                    StateLogic.changeStatus(ids, this.projectTemplate, undefined, state);
+                    StateLogic.changeStatus(ids, template, state);
                 }
             });
         }
@@ -108,7 +94,8 @@ export class MenuHandler{
     private selectProjectTemplate(templateName: string){
         this.templateLogic.selectProjectTemplate(templateName)
             .then( templateName =>{
-                this.projectTemplate = templateName;
+                this.templateDefinitions.getTemplate(templateName)
+                    .then( template => this.projectTemplate = template)
             });
     }
 }      
