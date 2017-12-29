@@ -5,143 +5,143 @@ let scrumTemplate : ITemplate =
         "Epic": 
             {
                 "New": {
-                    "In Progress": "Moved to the backlog" ,
-                    "Done": "Moved to the backlog",
-                    "Removed": "Reconsidering the Epic"
+                    "In Progress": "Implementation started" ,
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog"
                 }, 
                 "In Progress": {
-                    "New": "Implementation started",
-                    "Done": "Additional work found"
+                    "New": "Moved to the backlog",
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog"
                 }, 
                 "Done": {
-                    "New": "Work finished",
-                    "In Progress": "Work finished"
+                    "New": "Moved to the backlog",
+                    "In Progress": "Additional work found"
                 },
                 "Removed": {
-                    "New": "Removed from the backlog",
-                    "In Progress": "Removed from the backlog" ,
+                    "New": "Reconsidering the epic",
                 }
             },
         "Feature": 
             {
                 "New": {
-                    "In Progress": "Moved to the backlog" ,
-                    "Done": "Moved to the backlog",
-                    "Removed": "Reconsidering the feature"
+                    "In Progress": "Implementation started",
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog"
                 }, 
                 "In Progress": {
-                    "New": "Implementation started",
-                    "Done": "Additional work found"
+                    "New": "Moved to the backlog",
+                    "Done": "Work finished",
+                    "In Progress": "Removed from the backlog",
                 }, 
                 "Done": {
-                    "New": "Work finished",
-                    "In Progress": "Work finished"
+                    "New": "Moved to the backlog",
+                    "In Progress": "Additional work found"
                 },
                 "Removed": {
-                    "New": "Removed from the backlog",
-                    "In Progress": "Removed from the backlog" ,
+                    "New": "Reconsidering the feature",
                 }
             },
         "Product Backlog Item": 
             {
                 "New": {
-                    "Approved": "Moved to the backlog" ,
-                    "Committed": "Moved to the backlog",
-                    "Done": "Moved to the backlog",
-                    "Removed": "Reconsidering backlog item"
+                    "Approved": "Approved by the Product Owner" ,
+                    "Committed": "Commitment made by the team",
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog"
                 }, 
                 "Approved": {
-                    "New": "Approved by the Product Owner",
-                    "Committed": "Work stopped",
-                    "Done": "Additional work found"
+                    "New": "Moved to the backlog",
+                    "Committed": "Commitment made by the team",
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog",
                 },  
                 "Committed": {
-                    "New": "Commitment made by the team",
-                    "Approved": "Commitment made by the team",
-                    "Done": "Additional work found"
+                    "New": "Moved to the backlog",
+                    "Approved": "Work stopped",
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog",
                 },
                 "Done": {
-                    "New": "Work finished",
-                    "Approved": "Work finished" ,
-                    "Committed": "Work finished" ,
+                    "New": "Moved to the backlog",
+                    "Approved": "Additional work found" ,
+                    "Committed": "Additional work found" ,
                 },
                 "Removed": {
-                    "New": "Removed from the backlog",
-                    "Approved": "Removed from the backlog" ,
-                    "Committed": "Removed from the backlog" ,
+                    "New": "Reconsidering backlog item",
                 }
             },
         "Task": 
             {
                 "To Do": {
-                    "In Progress": "Work stopped" ,
-                    "Done": "Additional work found",
-                    "Removed": "Reconsidering the Task"
+                    "In Progress": "Work started" ,
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog"
                 }, 
                 "In Progress": {
-                    "To Do": "Work started",
-                    "Done": "Additional work found"
+                    "To Do": "Work stopped",
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog",
                 }, 
                 "Done": {
-                    "To Do": "Work finished",
-                    "In Progress": "Work finished"
+                    "To Do": "Additional work found",
+                    "In Progress": "Additional work found"
                 },
                 "Removed": {
-                    "To Do": "Removed from the backlog",
-                    "In Progress": "Removed from the backlog" ,
+                    "To Do": "Reconsidering the Task",
                 }
             },
         "Bug": 
             {
                 "New": {
-                    "Approved": "Moved to the backlog" ,
-                    "Committed": "Moved to the backlog",
-                    "Done": "Moved to the backlog",
-                    "Removed": "Reconsidering backlog item"
+                    "Approved": "Approved by the Product Owner" ,
+                    "Committed": "Commitment made by the team",
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog"
                 }, 
                 "Approved": {
-                    "New": "Approved by the Product Owner",
-                    "Committed": "Work stopped",
-                    "Done": "Additional work found"
+                    "New": "Moved to the backlog",
+                    "Committed": "Commitment made by the team",
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog",
                 },  
                 "Committed": {
-                    "New": "Commitment made by the team",
-                    "Approved": "Commitment made by the team",
-                    "Done": "Additional work found"
+                    "New": "Moved to the backlog",
+                    "Approved": "Work stopped",
+                    "Done": "Work finished",
+                    "Removed": "Removed from the backlog",
                 },
                 "Done": {
-                    "New": "Work finished",
-                    "Approved": "Work finished" ,
-                    "Committed": "Work finished" ,
+                    "New": "Moved to the backlog",
+                    "Approved": "Additional work found" ,
+                    "Committed": "Additional work found" ,
                 },
                 "Removed": {
-                    "New": "Removed from the backlog",
-                    "Approved": "Removed from the backlog" ,
-                    "Committed": "Removed from the backlog" ,
+                    "New": "Reconsidering backlog item",
                 }
             },
         "Impediment": 
             {
                 "Open": {
-                    "Closed": "Impediment reopened"
+                    "Closed": "Impediment removed"
                 },
                 "Closed": {
-                    "Open": "Impediment removed"
+                    "Open": "Impediment reopened"
                 }
             },
         "Test Case": 
             {
                 "Design": {
-                    "Ready": "Update Test Case",
-                    "Closed": "Reactivated"
+                    "Ready": "Completed",
+                    "Closed": "Obsolete"
                 }, 
                 "Ready": {
-                    "Design": "Completed",
-                    "Closed": "Reactivated"
+                    "Design": "Update Test Case",
+                    "Closed": "Obsolete"
                 },
                 "Closed": {
-                    "Design": "Obsolete",
-                    "Ready": "Obsolete"
+                    "Design": "Reactivated",
+                    "Ready": "Reactivated"
                 }
             }
     };

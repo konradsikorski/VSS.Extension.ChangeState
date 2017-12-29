@@ -19,8 +19,8 @@ export class Template {
 
     public getReasonForStateForType(workItemType: string, fromState: string, toState: string): string{
         return  this.template[workItemType] && 
-                this.template[workItemType][toState]&&
-                this.template[workItemType][toState][fromState];
+                this.template[workItemType][fromState]&&
+                this.template[workItemType][fromState][toState];
     }
 
     public getStatusesForWorkItem(workItemType: string) : string[]{

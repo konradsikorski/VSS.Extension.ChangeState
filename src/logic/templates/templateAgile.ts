@@ -5,162 +5,159 @@ let agileTemplate : ITemplate =
     // work item
     "Epic": 
         {
-            // to state
+            // from state
             "New": {
-                // from state | reason
-                "Active": "Moved to the backlog" ,
-                "Resolved": "Moved to the backlog",
-                "Closed": "Moved to the backlog",
-                "Removed": "Reconsidering the Epic"
+                // to state | reason
+                "Active": "Implementation started" ,
+                "Resolved": "Features complete",
+                "Closed": "Acceptance tests pass",
+                "Removed": "Removed from the backlog"
             }, 
             "Active": {
-                "New": "Implementation started",
-                "Resolved": "Acceptance tests fail",
-                "Closed": "Reintroduced in Scope"
+                "New": "Moved to the backlog",
+                "Resolved": "Features complete",
+                "Closed": "Acceptance tests pass",
+                "Removed": "Removed from the backlog",
             },  
             "Resolved": {
-                "New": "Features complete",
-                "Active": "Features complete" ,
-                "Closed": "Closed in error"
+                "New": "Moved to the backlog",
+                "Active": "Acceptance tests fail" ,
+                "Closed": "Acceptance tests pass",
+                "Removed": "Removed from the backlog",
             }, 
             "Closed": {
-                "New": "Acceptance tests pass",
-                "Active": "Acceptance tests pass" ,
-                "Resolved": "Acceptance tests pass"
+                "New": "Moved to the backlog",
+                "Active": "Reintroduced in Scope",
+                "Resolved": "Closed in error",
             },
             "Removed": {
-                "New": "Removed from the backlog",
-                "Active": "Removed from the backlog" ,
-                "Resolved": "Removed from the backlog",
-                "Closed": "Removed from the backlog"
+                "New": "Reconsidering the Epic",
             }
         },
     "Feature": 
         {
             "New": {
-                "Active": "Moved to the backlog" ,
-                "Resolved": "Moved to the backlog",
-                "Closed": "Moved to the backlog",
-                "Removed": "Reconsidering the Feature"
+                "Active": "Implementation started" ,
+                "Resolved": "Stories complete",
+                "Closed": "Acceptance tests pass",
+                "Removed": "Removed from the backlog"
             }, 
             "Active": {
-                "New": "Implementation started",
-                "Resolved": "Acceptance tests fail",
-                "Closed": "Reintroduced in Scope"
+                "New": "Moved to the backlog",
+                "Resolved": "Stories complete",
+                "Closed": "Acceptance tests pass",
+                "Removed": "Removed from the backlog",
             },  
             "Resolved": {
-                "New": "Stories complete",
-                "Active": "Stories complete" ,
-                "Closed": "Closed in error"
+                "New": "Moved to the backlog",
+                "Active": "Acceptance tests fail",
+                "Closed": "Acceptance tests pass",
+                "Removed": "Removed from the backlog",
             }, 
             "Closed": {
-                "New": "Acceptance tests pass",
-                "Active": "Acceptance tests pass" ,
-                "Resolved": "Acceptance tests pass",
+                "New": "Moved to the backlog",
+                "Active": "Reintroduced in Scope" ,
+                "Resolved": "Closed in error",
             },
             "Removed": {
-                "New": "Removed from the backlog",
-                "Active": "Removed from the backlog" ,
-                "Resolved": "Removed from the backlog",
-                "Closed": "Removed from the backlog"
+                "New": "Reconsidering the Feature",
             }
         },
     "User Story": 
         {
             "New": {
-                "Active": "Moved to the backlog" ,
-                "Resolved": "Moved to the backlog",
-                "Closed": "Moved to the backlog",
-                "Removed": "Reconsidering the User Story"
+                "Active": "Implementation started",
+                "Resolved": "Code complete and unit tests pass",
+                "Closed": "Acceptance tests pass",
+                "Removed": "Removed from the backlog"
             }, 
             "Active": {
-                "New": "Implementation started",
-                "Resolved": "Acceptance tests fail",
-                "Closed": "Reintroduced in Scope"
+                "New": "Moved to the backlog",
+                "Resolved": "Code complete and unit tests pass",
+                "Closed": "Acceptance tests pass",
+                "Removed": "Removed from the backlog",
             },  
             "Resolved": {
-                "New": "Code complete and unit tests pass",
-                "Active": "Code complete and unit tests pass" ,
-                "Closed": "Closed in error"
+                "New": "Moved to the backlog",
+                "Active": "Acceptance tests fail" ,
+                "Closed": "Acceptance tests pass",
+                "Removed": "Removed from the backlog",
             }, 
             "Closed": {
-                "New": "Acceptance tests pass",
-                "Active": "Acceptance tests pass" ,
-                "Resolved": "Acceptance tests pass",
+                "New": "Moved to the backlog",
+                "Active": "Reintroduced in Scope" ,
+                "Resolved": "Closed in error",
             },
             "Removed": {
-                "New": "Removed from the backlog",
-                "Active": "Removed from the backlog" ,
-                "Resolved": "Removed from the backlog",
-                "Closed": "Removed from the backlog"
+                "New": "Reconsidering the User Story",
             }
         },
     "Task": 
         {
             "New": {
-                "Active": "Work halted" ,
-                "Closed": "Reactivated",
-                "Removed": "Reconsidering the Task"
+                "Active": "Work started",
+                "Closed": "Completed",
+                "Removed": "Removed from the backlog"
             }, 
             "Active": {
-                "New": "Work started",
-                "Closed": "Reactivated"
+                "New": "Work halted",
+                "Closed": "Completed",
+                "Removed": "Removed from the backlog",
             }, 
             "Closed": {
-                "New": "Completed",
-                "Active": "Completed"
+                "New": "Reactivated",
+                "Active": "Reactivated",
+                "Removed": "Removed from the backlog"
             },
             "Removed": {
-                "New": "Removed from the backlog",
-                "Active": "Removed from the backlog" ,
-                "Closed": "Removed from the backlog"
+                "New": "Reconsidering the Task",
             }
         },
     "Bug": 
         {
             "New": {
-                "Active": "Investigation Complete" ,
-                "Resolved": "Not fixed",
-                "Closed": "Not fixed"
+                "Active": "Approved" ,
+                "Resolved": "Fixed",
+                "Closed": "Fixed and verified"
             }, 
             "Active": {
-                "New": "Approved",
-                "Resolved": "Not fixed",
-                "Closed": "Regression"
+                "New": "Investigation Complete",
+                "Resolved": "Fixed",
+                "Closed": "Fixed and verified"
             },  
             "Resolved": {
-                "New": "Fixed",
-                "Active": "Fixed" ,
-                "Closed": "Resolved in error"
+                "New": "Not fixed",
+                "Active": "Not fixed",
+                "Closed": "Verified"
             }, 
             "Closed": {
-                "New": "Fixed and verified",
-                "Active": "Fixed and verified" ,
-                "Resolved": "Verified",
+                "New": "Not fixed",
+                "Active": "Regression",
+                "Resolved": "Resolved in error",
             }
         },
     "Issue": 
         {
             "Active": {
-                "Closed": "Reactivated"
+                "Closed": "Issue Resolved"
             },
             "Closed": {
-                "Active": "Issue Resolved"
+                "Active": "Reactivated"
             }
         },
     "Test Case": 
         {
             "Design": {
-                "Ready": "Update Test Case",
-                "Closed": "Reactivated"
+                "Ready": "Completed",
+                "Closed": "Obsolete"
             }, 
             "Ready": {
-                "Design": "Completed",
-                "Closed": "Reactivated"
+                "Design": "Update Test Case",
+                "Closed": "Obsolete"
             },
             "Closed": {
-                "Design": "Obsolete",
-                "Ready": "Obsolete"
+                "Design": "Reactivated",
+                "Ready": "Reactivated"
             }
         }
 }

@@ -51,7 +51,7 @@ export class StateLogic {
                         continue;
                     }
                     
-                    console.log( `Template: ${template}, New state: ${newState}, New reason: ${newReason}`);
+                    console.log( `Template: ${template.name}, New state: ${newState}, New reason: ${newReason}`);
 
                     let update = [
                         {
