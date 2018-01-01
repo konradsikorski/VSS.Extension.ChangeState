@@ -2,31 +2,29 @@ import {StateLogic} from "./statesLogic"
 import VSS_Extension_Service = require("VSS/SDK/Services/ExtensionData");
 import Q = require("q");
 
-export class TemplateLogic{
-    public getCurrentProjectTemplate() : PromiseLike<string> {            
-        return VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData)
-            .then((dataService: VSS_Extension_Service.ExtensionDataService) => 
-            {
-                let context = VSS.getWebContext();
-                let projectId = context.project.id;
-                let valueKey = this.getCacheKey(projectId);
-            
-                return dataService.getValue(valueKey, {scopeType: "Default"})
-                    .then((projectTemplateValue: string) => 
-                    {
-                        console.log("template name from cache: " + projectTemplateValue);                 
-                
-                        if(!projectTemplateValue){
-                            return this.getProjectTemplate(projectId)
-                                .then((templateName: string) => {
-                                    this.saveProjectTemplate(templateName, dataService);
-                                    return templateName;
-                                });
-                        }
+export class TemplateLogic {
+    public getCurrentProjectTemplate() : PromiseLike<string> {
+        let context = VSS.getWebContext();
+        let projectId = context.project.id;
 
-                        return projectTemplateValue;
-                    });
-            })
+        return this.getProjectTemplate(projectId)
+            .then((templateName: string) => {
+                if(templateName) return templateName;
+
+                return VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData)
+                    .then((dataService: VSS_Extension_Service.ExtensionDataService) => 
+                    {
+                        let valueKey = this.getCacheKey(projectId);
+                    
+                        return dataService.getValue(valueKey, {scopeType: "Default"})
+                            .then((projectTemplateValue: string) => 
+                            {
+                                console.log(Date.now() + ": template name from cache: " + projectTemplateValue);                 
+                        
+                                return projectTemplateValue;
+                            });
+                    })
+            });
     }
 
     private getProjectTemplate(projectId: string){
