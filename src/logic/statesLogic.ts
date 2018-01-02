@@ -1,26 +1,48 @@
 import {Template} from './templates/core'
 import TFS_Wit_Client = require("TFS/WorkItemTracking/RestClient"); 
 
+export class WorkItem {
+    type: string;
+    status: string;
+}
+
 export class StateLogic {
+    public static getStatusWitType(workItemsId: number[]) : IPromise<WorkItem[]>{
 
-    public static getCommonStatuses(template: Template, workItemTypes: string[]): Array<string>{
-        if(!workItemTypes || workItemTypes.length == 0) return null;
+        let witClient = TFS_Wit_Client.getClient();
+        
+        return witClient.getWorkItems(workItemsId, ["System.State", "System.WorkItemType"])
+            .then( (workItems) => {
+                let statuses = new Array<WorkItem>();
 
-        let states = template.getStatusesForWorkItem(workItemTypes[0]);
+                for(let i=0; i<workItems.length; ++i) {
+                    let item = workItems[i];
+                    statuses.push({
+                        status: item.fields["System.State"],
+                        type: item.fields["System.WorkItemType"]
+                    });
+                }
+
+                return statuses;
+            });
+    }
+
+    public static getCommonStatuses(states: Array<string[]>): string[]{
+        if(!states || states.length == 0) return new Array<string>();
+
+        let commonStates = states[0];
 
         // remove uncommon statuses
-        for(let i = 1; i < workItemTypes.length; ++i)
+        for(let i = 1; i < states.length; ++i)
         {
-            let statesForType = template.getStatusesForWorkItem(workItemTypes[i]);
-
-            for(let j=0; j<states.length; ++j){
-                if(statesForType.indexOf(states[j]) < 0){
-                    states.splice(j--,1);
+            for(let j=0; j<commonStates.length; ++j){
+                if(states[i].indexOf(commonStates[j]) < 0){
+                    commonStates.splice(j--,1);
                 }
             }
         };
 
-        return states;
+        return commonStates;
     }
 
     public static changeStatus(selectedItems: Array<number>, template: Template, toState: string): void{

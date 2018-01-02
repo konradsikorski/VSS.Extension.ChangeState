@@ -69,26 +69,36 @@ export class MenuHandler{
         ];
     }
 
-    private buildStatesMenu(actionContext: any, template: Template) : IContributedMenuItem[]{
-        let ids = actionContext.ids || actionContext.workItemIds;
+    private buildStatesMenu(actionContext: any, template: Template) : IPromise<IContributedMenuItem[]>{
+        let ids = <number[]>(actionContext.ids || actionContext.workItemIds);
         let subMenus = new Array<IContributedMenuItem>();
         
         let selectedItemsTypes = actionContext.workItemTypeNames;
-        let commonStatuses = StateLogic.getCommonStatuses(template, selectedItemsTypes);
         
-        for(let i = 0; i < commonStatuses.length; ++i){
-            let state = commonStatuses[i];
+        return StateLogic.getStatusWitType(ids)
+            .then(workItems => {
+                let availableStatuses = new Array<string[]>();
 
-            subMenus.push( {
-                text: state,
-                icon: `static/images/status${state.replace(' ', '')}.png`,
-                action: (actionContext: any) => {
-                    StateLogic.changeStatus(ids, template, state);
+                for( let workItem of workItems) {
+                    availableStatuses.push( template.getAvailableStatuses(workItem.type, workItem.status) );
                 }
-            });
-        }
 
-        return subMenus;
+                let commonStatuses = StateLogic.getCommonStatuses(availableStatuses);
+                    
+                for(let i = 0; i < commonStatuses.length; ++i) {
+                    let state = commonStatuses[i];
+
+                    subMenus.push( {
+                        text: state,
+                        icon: `static/images/status${state.replace(' ', '')}.png`,
+                        action: (actionContext: any) => {
+                            StateLogic.changeStatus(ids, template, state);
+                        }
+                    });
+                }
+
+                return subMenus;
+            });
     }
 
     private selectProjectTemplate(templateName: string){
