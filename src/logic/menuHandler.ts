@@ -97,6 +97,14 @@ export class MenuHandler{
                     });
                 }
 
+                if(subMenus.length == 0) {
+                    subMenus.push({
+                        text: '(empty)',
+                        noIcon: true,
+                        disabled: true
+                    });
+                }
+
                 return subMenus;
             });
     }
