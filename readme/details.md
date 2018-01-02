@@ -16,17 +16,14 @@ Change state for many work items at once from context menu.
 ![queryResult](/readme/img/queryResult.png)
 
 ## Details
-### Narrowing options
-If you select items of different types then list of available states will be narrowed to the common of all of theme.
+### Available states
+List of states will contains only these allowed by workflow. So for example if current work item state is 'Removed' then the menu will contains only 'New' option because other are not allowed.
 
-### Forward / Backword actions
-In the menu you can find 'Forward' and 'Backword actions. Selecting theme will change work items state to next or previous in the workflow. Below example of workflow steps for Backlog Item for
+### Selecting many items
+If you select items of different types then list of available states will be narrowed to the common of all of theme. If no state is available then '(empty)' text will be shown on the list.
 
-Agile:
-> New <> Active <> Resolved <> Closed
-
-and Scrum:
-> New <> Approved <> Committed <> Done
+### Refresh item state view
+After changing the state the view will not be refreshed, you have to refresh the page manually if you want to see the change.
 
 ### Supported projects
 For now only `Agile` and `Scrum` project templates are supported.
