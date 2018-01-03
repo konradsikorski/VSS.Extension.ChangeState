@@ -40,6 +40,8 @@ export class StateLogic {
                     commonStates.splice(j--,1);
                 }
             }
+
+            if( commonStates.length == 0) break;
         };
 
         return commonStates;
