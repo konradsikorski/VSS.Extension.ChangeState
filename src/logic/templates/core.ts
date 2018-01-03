@@ -23,6 +23,22 @@ export class Template {
                 this.template[workItemType][fromState][toState];
     }
 
+    public getAvailableStatuses(workItemType: string, workItemStatus: string): string[] {
+        let statesObject = 
+            this.template[workItemType] &&
+            this.template[workItemType][workItemStatus]
+        
+        let states = new Array<string>();
+
+        for (let key in statesObject) {
+            if (statesObject.hasOwnProperty(key)) {
+                states.push(key)
+            }
+        }
+
+        return states;
+    }
+
     public getStatusesForWorkItem(workItemType: string) : string[]{
         let statesObject = this.template[workItemType];
         let states = new Array<string>();
