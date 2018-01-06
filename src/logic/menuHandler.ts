@@ -69,11 +69,9 @@ export class MenuHandler{
         ];
     }
 
-    private buildStatesMenu(actionContext: any, template: Template) : IPromise<IContributedMenuItem[]>{
+    private buildStatesMenu(actionContext: any, template: Template) : IPromise<IContributedMenuItem[]>|IContributedMenuItem[]{
         let ids = <number[]>(actionContext.ids || actionContext.workItemIds);
         let subMenus = new Array<IContributedMenuItem>();
-        
-        let selectedItemsTypes = actionContext.workItemTypeNames;
         
         return StateLogic.getStatusWitType(ids)
             .then(workItems => {
@@ -100,8 +98,8 @@ export class MenuHandler{
                 if(subMenus.length == 0) {
                     subMenus.push({
                         text: '(empty)',
-                        noIcon: true,
-                        disabled: true
+                        disabled: true,
+                        title: 'You cannot go to any state for these items'
                     });
                 }
 
