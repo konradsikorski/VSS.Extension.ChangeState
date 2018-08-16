@@ -1,7 +1,7 @@
-       {
+{
     "manifestVersion": 1,
     "id": "change-status",
-    "version": "1.2.109",
+    "version": "1.2.146",
     "name": "Change State",
     "description": "Change state for many work items at once from context menu",
     "publisher": "KonradSikorski",
@@ -86,9 +86,9 @@
             "addressable": true
         },
         {
-            "path": "node_modules/vss-web-extension-sdk/lib",
+            "path": "node_modules/vss-web-extension-sdk/lib/VSS.SDK.min.js",
             "addressable": true,
-            "packagePath": "lib"
+            "packagePath": "lib/VSS.SDK.min.js"
         },
         {
             "path": "_changeStatusMenu.html",
