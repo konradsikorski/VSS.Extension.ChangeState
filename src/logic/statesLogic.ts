@@ -63,11 +63,6 @@ export class StateLogic {
                             "op": "add",
                             "path": "/fields/System.State",
                             "value": newState
-                        },
-                        {
-                            "op": "add",
-                            "path": "/fields/System.Reason",
-                            "value": newReason
                         }
                         ];
                         
