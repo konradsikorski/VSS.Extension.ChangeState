@@ -1,9 +1,30 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-
     "version": "0.1.0",
+    "runner": "terminal",  
+
     "tasks": [
+        {
+            "taskName": "build",
+            "command": "tsc",
+            "isShellCommand": true,
+            "showOutput": "always",
+            // "showOutput": "silent",
+            "echoCommand": true,
+            "isBuildCommand": true,
+            // "args": ["-w", "-p", "."],
+            "problemMatcher": "$tsc-watch"
+        },
+        {
+            "taskName": "build-dev",
+            "command": "tsc",
+            "isShellCommand": true,
+            "showOutput": "always",
+            // "showOutput": "silent",
+            "echoCommand": true,
+            "isBuildCommand": true,
+            "args": ["-p", "./tsconfig.DEV.json"],
+            "problemMatcher": "$tsc-watch"
+        },
         {
             "taskName": "login",
             "command": "tfx",
@@ -21,9 +42,9 @@
             "isShellCommand": true,
             "showOutput": "always",
             "echoCommand": true,
-            "isBuildCommand": true,
+            "isBuildCommand": false,
             "args": [
-                "extension", "create",  "--rev-version", "--output-path", "package"
+                "extension", "create",  "--output-path", "package"
             ]
         },
         {
@@ -32,19 +53,10 @@
             "isShellCommand": true,
             "showOutput": "always",
             "echoCommand": true,
-            "isBuildCommand": true,
+            "isBuildCommand": false,
+          
             "args": [
-                "extension", "create",  "--rev-version", "--output-path", "package", "--overrides-file", ".\\vss-extension.DEV.json"
-            ]
-        },
-        {
-            "taskName": "publish-version-up",
-            "command": "tfx",
-            "isShellCommand": true,
-            "showOutput": "always",
-            "echoCommand": false,
-            "args": [
-                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com", "--rev-version", "--output-path", "package"
+                "extension", "create",  "--output-path", "package", "--rev-version", "--overrides-file", ".\\vss-extension.DEV.json"
             ]
         },
         {
@@ -54,7 +66,7 @@
             "showOutput": "always",
             "echoCommand": false,
             "args": [
-                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com", "--output-path", "package"
+                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com",  "--output-path", "package"
             ]
         },
         {
@@ -64,7 +76,7 @@
             "showOutput": "always",
             "echoCommand": false,
             "args": [
-                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com", "--output-path", "package", "--overrides-file", ".\\vss-extension.DEV.json"
+                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com", "--rev-version", "--output-path", "package", "--overrides-file", ".\\vss-extension.DEV.json"
             ]
         }
     ]

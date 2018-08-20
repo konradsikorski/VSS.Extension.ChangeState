@@ -1,0 +1,22 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "module": "amd",
+        "moduleResolution": "node",
+        "target": "es5",
+        "sourceMap": false,
+        "outFile": "./src/app.js",
+        "removeComments": true,
+        "noImplicitAny": true,
+        "skipLibCheck": true,
+        // "outDir": "build/",
+        "watch": true,
+        "rootDir": "./",
+        "types": [
+            "vss-web-extension-sdk"
+        ]	
+    },
+    "include": [
+        "src/**/*"
+    ],
+}
