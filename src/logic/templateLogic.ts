@@ -3,11 +3,11 @@ import VSS_Extension_Service = require("VSS/SDK/Services/ExtensionData");
 import Q = require("q");
 
 export class TemplateLogic {
-    public getCurrentProjectTemplate() : PromiseLike<string> {
+    public getCurrentProjectTemplateName() : PromiseLike<string> {
         let context = VSS.getWebContext();
         let projectId = context.project.id;
 
-        return this.getProjectTemplate(projectId)
+        return this.getProjectTemplateName(projectId)
             .then((templateName: string) => {
                 if(templateName) return templateName;
 
@@ -27,7 +27,7 @@ export class TemplateLogic {
             });
     }
 
-    private getProjectTemplate(projectId: string){
+    private getProjectTemplateName(projectId: string){
         let deferredPromise = Q.defer<string>();
 
         VSS.require(["TFS/Core/RestClient"], (TFS_Wit_WebApi: any) => {

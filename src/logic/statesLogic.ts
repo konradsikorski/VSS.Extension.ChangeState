@@ -44,14 +44,8 @@ export class StateLogic {
                         console.log(`Cannot change status for this item. Template: ${template}`);
                         continue;
                     }
-
-                    let newReason = template.getReasonForStateForType(type, state, newState);
-                    if(!newReason) {
-                        console.log(`Cannot change reason for this item. Template: ${template}`);
-                        continue;
-                    }
                     
-                    console.log( `Template: ${template.name}, New state: ${newState}, New reason: ${newReason}`);
+                    console.log( `Template: ${template.name}, New state: ${newState}`);
 
                     let update = [
                         {

@@ -7,21 +7,11 @@ export interface ITemplate{
 }
 
 export interface IWorkItemType{
-    [name:string] : IState;
-}
-
-export interface IState {
-    [name:string] : string;
+    [name:string] : string[];
 }
 
 export class Template {
     constructor(public name: string, public template:ITemplate){}
-
-    public getReasonForStateForType(workItemType: string, fromState: string, toState: string): string{
-        return  this.template[workItemType] && 
-                this.template[workItemType][fromState]&&
-                this.template[workItemType][fromState][toState];
-    }
 
     public getStatusesForWorkItem(workItemType: string) : string[]{
         let statesObject = this.template[workItemType];

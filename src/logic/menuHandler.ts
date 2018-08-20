@@ -7,6 +7,7 @@ import TFS_Wit_Services = require("TFS/WorkItemTracking/Services");
 import VSS_Extension_Service = require("VSS/SDK/Services/ExtensionData");
 
 export class MenuHandler{
+    projectTemplateName: string;
     projectTemplate : Template;
     templateDefinitions: TemplateDefinitions = new TemplateDefinitions();
     templateLogic: TemplateLogic = new TemplateLogic();
@@ -15,8 +16,9 @@ export class MenuHandler{
     constructor()
     {
         this.getCurrentProjectTemplatePromise = 
-            this.templateLogic.getCurrentProjectTemplate()
+            this.templateLogic.getCurrentProjectTemplateName()
                 .then(templateName => {
+                    this.projectTemplateName = templateName;
                     this.templateDefinitions.getTemplate(templateName)
                     .then( template => {
                       this.projectTemplate = template;  
