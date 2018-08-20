@@ -25,7 +25,7 @@ export class StateLogic {
 
     public static changeStatus(selectedItems: Array<number>, template: Template, toState: string): void{
         let witClient = TFS_Wit_Client.getClient();
-        witClient.getWorkItems(selectedItems, ["System.State", "System.Reason", "System.WorkItemType"])
+        witClient.getWorkItems(selectedItems, ["System.State", "System.WorkItemType"])
             .then( (workItems) => {
                 console.log("GET: " + JSON.stringify(workItems));
 
@@ -36,7 +36,6 @@ export class StateLogic {
                     let revision = item.rev;
                     let type = item.fields["System.WorkItemType"];
                     let state = item.fields["System.State"];
-                    let reason = item.fields["System.Reason"];
                     console.log( `ID: ${id}, Type: ${type}, State: ${state}, Revision: ${revision}`);
                     
                     let newState = toState;
@@ -59,10 +58,15 @@ export class StateLogic {
                             "value": newState
                         }
                         ];
-                        
-                    witClient.updateWorkItem(update, id).then( (workItem) => {
-                        console.log('Work item UPDATED: ' + workItem.id);
-                    });
+                    
+                    try {
+                        witClient.updateWorkItem(update, id).then( (workItem) => {
+                            console.log('Work item UPDATED: ' + workItem.id);
+                        });
+                    }
+                    catch(e) {
+                        console.error(`Work item (${id}) update error: ${e}`)
+                    }
                 }
 
                 // VSS.getService(VSS.ServiceIds.Navigation).then(function(navigationService) {
