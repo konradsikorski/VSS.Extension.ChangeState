@@ -1,11 +1,11 @@
 ## Changelog
 
 ### v. 1.3
-##### New
+#### New
 
 + Switch to TypeScript
 
-##### Update
+#### Update
 
 + Improved performance (asyncronusly load data)
 + Remove step forward/backword menu
@@ -13,16 +13,16 @@
 + Do not update 'Reason' field manually
 
 ### v. 1.1.1
-##### Fix
+#### Fix
 
 + Hardcoded template name in changeState method
 
 ### v. 1.1
-##### New
+#### New
 
 + For unsupported project templates show project template selection menu
 
 ### v. 1.0
-##### New
+#### New
 
 + First release
