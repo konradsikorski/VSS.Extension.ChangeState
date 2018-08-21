@@ -7,8 +7,8 @@ import TFS_Wit_Services = require("TFS/WorkItemTracking/Services");
 import VSS_Extension_Service = require("VSS/SDK/Services/ExtensionData");
 
 export class MenuHandler{
-    projectTemplateName: string;
-    projectTemplate : Template;
+    projectTemplateName?: string = undefined;
+    projectTemplate? : Template = undefined;
     templateDefinitions: TemplateDefinitions = new TemplateDefinitions();
     templateLogic: TemplateLogic = new TemplateLogic();
     getCurrentProjectTemplatePromise: PromiseLike<void>;

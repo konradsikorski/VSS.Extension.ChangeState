@@ -57,7 +57,7 @@ export class TemplateLogic {
         console.log("template name saved to cache: " + templateName);
     }
 
-    private getCacheKey(projectId: string = null) : string{
+    private getCacheKey(projectId?: string) : string{
         if(!projectId) {
             let context = VSS.getWebContext();
             projectId = context.project.id;

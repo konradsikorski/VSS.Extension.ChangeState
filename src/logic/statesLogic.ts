@@ -4,7 +4,7 @@ import TFS_Wit_Client = require("TFS/WorkItemTracking/RestClient");
 export class StateLogic {
 
     public static getCommonStatuses(template: Template, workItemTypes: string[]): Array<string>{
-        if(!workItemTypes || workItemTypes.length == 0) return null;
+        if(!workItemTypes || workItemTypes.length == 0) return [];
 
         let states = template.getStatusesForWorkItem(workItemTypes[0]);
 
