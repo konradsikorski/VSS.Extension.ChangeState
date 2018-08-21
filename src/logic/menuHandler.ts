@@ -72,7 +72,7 @@ export class MenuHandler{
     }
 
     private buildStatesMenu(actionContext: any, template: Template) : IContributedMenuItem[]{
-        let ids = actionContext.ids || actionContext.workItemIds;
+        let ids = <number[]>(actionContext.ids || actionContext.workItemIds);
         let subMenus = new Array<IContributedMenuItem>();
         
         let selectedItemsTypes = actionContext.workItemTypeNames;
@@ -87,6 +87,14 @@ export class MenuHandler{
                 action: (actionContext: any) => {
                     StateLogic.changeStatus(ids, template, state);
                 }
+            });
+        }
+
+        if(subMenus.length == 0) {
+            subMenus.push({
+                text: '(empty)',
+                noIcon: true,
+                disabled: true
             });
         }
 
