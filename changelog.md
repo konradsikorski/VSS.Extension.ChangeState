@@ -1,5 +1,11 @@
 ## Changelog
 
+### v. 1.4
+
+#### Update
+
++ Simplified template structure
+
 ### v. 1.3
 #### New
 

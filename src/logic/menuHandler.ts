@@ -1,13 +1,11 @@
 import {StateLogic} from "./statesLogic"
-import {TemplateLogic} from "./templateLogic"
+import {TemplateLogic, TemplateDetails} from "./templateLogic"
 import {TemplateDefinitions} from "./templateDefinitions"
+import {WorkItemTypeLogic} from "./workItemTypesLogic"
 import {Template} from "./templates/core"
 
-import TFS_Wit_Services = require("TFS/WorkItemTracking/Services");
-import VSS_Extension_Service = require("VSS/SDK/Services/ExtensionData");
-
 export class MenuHandler{
-    projectTemplateName?: string = undefined;
+    projectTemplateDetails?: TemplateDetails = undefined;
     projectTemplate? : Template = undefined;
     templateDefinitions: TemplateDefinitions = new TemplateDefinitions();
     templateLogic: TemplateLogic = new TemplateLogic();
@@ -17,9 +15,11 @@ export class MenuHandler{
     {
         this.getCurrentProjectTemplatePromise = 
             this.templateLogic.getCurrentProjectTemplateName()
-                .then(templateName => {
-                    this.projectTemplateName = templateName;
-                    this.templateDefinitions.getTemplate(templateName)
+                .then(templateDetails => {
+                    if (!templateDetails) return;
+
+                    this.projectTemplateDetails = templateDetails;
+                    this.templateDefinitions.getTemplate(templateDetails.name)
                     .then( template => {
                       this.projectTemplate = template;  
                     });
@@ -31,25 +31,39 @@ export class MenuHandler{
             getMenuItems: (actionContext: any)  => {
                 return this.getCurrentProjectTemplatePromise
                     .then(() => {
-                            let subMenus = 
-                                (!this.projectTemplate) 
-                                    ? this.buildSelectProjectTemplateMenu() 
-                                    : this.buildStatesMenu(actionContext, this.projectTemplate);
-                            
-                            return new Array<IContributedMenuItem>(
-                                {
-                                    text: "Change state",
-                                    groupId: "modify",
-                                    icon: "static/images/changeStatusAction.png",
-                                    childItems: subMenus,
-                                }
-                            );
-                        });
-                    }
-            };
+                        if(this.projectTemplate) {
+                            let subMenus = this.buildStatesMenu(actionContext, this.projectTemplate);
+                            return this.buildMainMenu(subMenus);
+                        }
+                        else {
+                            return WorkItemTypeLogic.getProjectTemplateDetails().then( (t) => {
+                                this.projectTemplate = new Template("", t);
+
+                                let subMenus = 
+                                    (!this.projectTemplate) 
+                                        ? this.buildSelectProjectTemplateMenu(this.projectTemplateDetails) 
+                                        : this.buildStatesMenu(actionContext, this.projectTemplate);
+
+                                return this.buildMainMenu(subMenus);
+                            });
+                        }
+                    });
+            }
+        };
+    }
+    
+    private buildMainMenu(subMenus: IContributedMenuItem[]) :Array<IContributedMenuItem>
+    {
+        return new Array<IContributedMenuItem>(
+            {
+                text: "Change state",
+                groupId: "modify",
+                icon: "static/images/changeStatusAction.png",
+                childItems: subMenus,
+            });
     }
 
-    private buildSelectProjectTemplateMenu(): IContributedMenuItem[]{
+    private buildSelectProjectTemplateMenu(templateDetails: TemplateDetails): IContributedMenuItem[]{
         return [
             {
                 text: "What is your project template?",
@@ -83,7 +97,7 @@ export class MenuHandler{
 
             subMenus.push( {
                 text: state,
-                icon: `static/images/status${state.replace(' ', '')}.png`,
+                icon: (template.name) ? `static/images/status${state.replace(' ', '')}.png` : undefined,
                 action: (actionContext: any) => {
                     StateLogic.changeStatus(ids, template, state);
                 }
