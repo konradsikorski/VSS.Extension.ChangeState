@@ -2,6 +2,10 @@
 
 ### v. 1.4
 
+#### New
+
++ Support custom project templates
+
 #### Update
 
 + Simplified template structure

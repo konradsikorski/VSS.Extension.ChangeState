@@ -1,5 +1,6 @@
 import {WorkItemType} from "TFS/WorkItemTracking/Contracts";
-import {ITemplate} from "./templates/core"
+import {ITemplate} from "./templates/core";
+import {WorkItemTrackingHttpClient4_1} from "TFS/WorkItemTracking/RestClient";
 import Q = require("q");
 
 export class WorkItemTypeLogic {    
@@ -10,7 +11,8 @@ export class WorkItemTypeLogic {
         let projectId = context.project.id;
         
         VSS.require(["TFS/WorkItemTracking/RestClient"], (restClient: any) => {
-            let client = restClient.getClient();
+            let client = <WorkItemTrackingHttpClient4_1>restClient.getClient();
+
             client.getWorkItemTypes(projectId).then(
                 (workItemTypes: WorkItemType[]) => {
                     let template = <ITemplate>{};
