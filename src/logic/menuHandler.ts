@@ -25,7 +25,7 @@ export class MenuHandler{
     }
 
     set projectTemplate(template : Template) {
-        CookieLogic.saveProjectTemplate(this.projectId, template.template);
+        if(template) CookieLogic.saveProjectTemplate(this.projectId, template.template);
         this._projectTemplate = template;
     }
 
@@ -116,16 +116,19 @@ export class MenuHandler{
     private buildStatesMenu(actionContext: any, template: Template) : IContributedMenuItem[]{
         let ids = <number[]>(actionContext.ids || actionContext.workItemIds);
         let subMenus = new Array<IContributedMenuItem>();
-        
+        const icons = ["Active", "Approved", "Closed", "Committed", "Design", "Done", "InProgress", 
+            "New", "Open", "Ready", "Removed", "Resolved", "ToDo"];
+                
         let selectedItemsTypes = actionContext.workItemTypeNames;
         let commonStatuses = StateLogic.getCommonStatuses(template, selectedItemsTypes);
         
         for(let i = 0; i < commonStatuses.length; ++i){
             let state = commonStatuses[i];
+            let icon = state.replace(' ', '');
 
             subMenus.push( {
                 text: state,
-                icon: (template.name) ? `static/images/status${state.replace(' ', '')}.png` : undefined,
+                icon: icons.indexOf(icon) >= 0 ? `static/images/status${icon}.png` : undefined,
                 action: (actionContext: any) => {
                     StateLogic.changeStatus(ids, template, state);
                 }
