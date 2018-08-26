@@ -47,6 +47,6 @@ let scrumTemplate : ITemplate = {
 
 export class ScrumTemplate extends Template {
     constructor(){
-        super("Scrum", scrumTemplate);
+        super(scrumTemplate, "Scrum");
     } 
 }

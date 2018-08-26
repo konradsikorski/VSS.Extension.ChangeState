@@ -3,45 +3,48 @@ import {TemplateLogic, TemplateDetails} from "./templateLogic"
 import {TemplateDefinitions} from "./templateDefinitions"
 import {WorkItemTypeLogic} from "./workItemTypesLogic"
 import {Template} from "./templates/core"
+import { CookieLogic } from "./cookieLogic";
+import Q = require("q");
 
 export class MenuHandler{
+    projectId: string;
     projectTemplateDetails?: TemplateDetails = undefined;
-    projectTemplate? : Template = undefined;
+    _projectTemplate? : Template = undefined;
     templateDefinitions: TemplateDefinitions = new TemplateDefinitions();
     templateLogic: TemplateLogic = new TemplateLogic();
     getCurrentProjectTemplatePromise: PromiseLike<void>;
 
     constructor()
     {
-        this.getCurrentProjectTemplatePromise = 
-            this.templateLogic.getCurrentProjectTemplateName()
-                .then(templateDetails => {
-                    if (!templateDetails) return;
+        let context = VSS.getWebContext();
+        this.projectId = context.project.id;
+    }
 
-                    this.projectTemplateDetails = templateDetails;
-                    this.templateDefinitions.getTemplate(templateDetails.name)
-                    .then( template => {
-                      this.projectTemplate = template;  
-                    });
-                });
+    get projectTemplate(): Template{
+        return this._projectTemplate;
+    }
+
+    set projectTemplate(template : Template) {
+        CookieLogic.saveProjectTemplate(this.projectId, template.template);
+        this._projectTemplate = template;
     }
 
     changeStateMenuHandler = (context: any) : IContributedMenuSource => {
         return <IContributedMenuSource> {
             getMenuItems: (actionContext: any)  => {
-                return this.getCurrentProjectTemplatePromise
+                return this.menuHandlerStart()
                     .then(() => {
                         if(this.projectTemplate) {
                             let subMenus = this.buildStatesMenu(actionContext, this.projectTemplate);
                             return this.buildMainMenu(subMenus);
                         }
                         else {
-                            return WorkItemTypeLogic.getProjectTemplateDetails().then( (t) => {
-                                this.projectTemplate = new Template("", t);
+                            return WorkItemTypeLogic.getProjectTemplateDetails(this.projectId).then( (template) => {
+                                this.projectTemplate = new Template(template);
 
                                 let subMenus = 
                                     (!this.projectTemplate) 
-                                        ? this.buildSelectProjectTemplateMenu(this.projectTemplateDetails) 
+                                        ? this.buildSelectProjectTemplateMenu() 
                                         : this.buildStatesMenu(actionContext, this.projectTemplate);
 
                                 return this.buildMainMenu(subMenus);
@@ -50,6 +53,31 @@ export class MenuHandler{
                     });
             }
         };
+    }
+
+    private menuHandlerStart() : IPromise<void>
+    {
+        // try get the template from cookies
+        let templateFromCookie = CookieLogic.getProjectTemplate(this.projectId);
+        if(templateFromCookie){
+            console.log( "Project template loaded from cookie2");
+            this._projectTemplate = new Template(templateFromCookie);
+            this.getCurrentProjectTemplatePromise = Q.resolve<void>()
+            return this.getCurrentProjectTemplatePromise;
+        }
+        
+        // if template doesnt exists in coockies then start standard procedure
+        return this.getCurrentProjectTemplatePromise = 
+            this.templateLogic.getCurrentProjectTemplateName(this.projectId)
+                .then(templateDetails => {
+                    if (!templateDetails) return;
+
+                    this.projectTemplateDetails = templateDetails;
+                    this.templateDefinitions.getTemplate(templateDetails.name)
+                    .then( template => {
+                        this.projectTemplate = template;  
+                    });
+                });
     }
     
     private buildMainMenu(subMenus: IContributedMenuItem[]) :Array<IContributedMenuItem>
@@ -63,7 +91,7 @@ export class MenuHandler{
             });
     }
 
-    private buildSelectProjectTemplateMenu(templateDetails: TemplateDetails): IContributedMenuItem[]{
+    private buildSelectProjectTemplateMenu(): IContributedMenuItem[]{
         return [
             {
                 text: "What is your project template?",

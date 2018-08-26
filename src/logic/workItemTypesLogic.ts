@@ -4,11 +4,8 @@ import {WorkItemTrackingHttpClient4_1} from "TFS/WorkItemTracking/RestClient";
 import Q = require("q");
 
 export class WorkItemTypeLogic {    
-    public static getProjectTemplateDetails(): Promise<ITemplate> {
+    public static getProjectTemplateDetails(projectId: string): Promise<ITemplate> {
         let deferredPromise = Q.defer<ITemplate>();
-        
-        let context = VSS.getWebContext();
-        let projectId = context.project.id;
         
         VSS.require(["TFS/WorkItemTracking/RestClient"], (restClient: any) => {
             let client = <WorkItemTrackingHttpClient4_1>restClient.getClient();

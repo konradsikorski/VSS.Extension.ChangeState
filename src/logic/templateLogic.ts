@@ -8,10 +8,7 @@ export interface TemplateDetails{
 }
 
 export class TemplateLogic {
-    public getCurrentProjectTemplateName() : PromiseLike<TemplateDetails> {
-        let context = VSS.getWebContext();
-        let projectId = context.project.id;
-
+    public getCurrentProjectTemplateName(projectId: string) : PromiseLike<TemplateDetails> {
         return this.getProjectTemplate(projectId)
             .then((template: TemplateDetails) => {
                 if(template) return template;
@@ -49,6 +46,7 @@ export class TemplateLogic {
                             name: project.capabilities.processTemplate.templateName
                         }
                         : undefined;
+
                     console.log("Project Template from tfs api: " + (template && template.name));
                     deferredPromise.resolve(template);
                 });

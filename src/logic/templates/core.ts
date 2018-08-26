@@ -7,7 +7,7 @@ export interface ITemplate{
 }
 
 export class Template {
-    constructor(public name: string, public template:ITemplate){}
+    constructor(public template:ITemplate, public name: string = undefined){}
 
     public getStatusesForWorkItem(workItemType: string) : string[]{
         return  this.template[workItemType];

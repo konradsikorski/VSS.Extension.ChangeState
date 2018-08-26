@@ -48,6 +48,6 @@ let agileTemplate : ITemplate = {
 
 export class AgileTemplate extends Template {
     constructor(){
-        super("Agile", agileTemplate);
+        super(agileTemplate, "Agile");
     } 
 }
