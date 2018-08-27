@@ -5,7 +5,7 @@
 #### New
 
 + Support custom project templates
-+ Store project template in browser coockies thanks that the state menu is showing immediately
++ Store project template in browser cookies thanks that the state menu is showing immediately
 
 #### Update
 
