@@ -40,7 +40,7 @@ export class MenuHandler{
                         }
                         else {
                             return WorkItemTypeLogic.getProjectTemplateDetails(this.projectId).then( (template) => {
-                                this.projectTemplate = new Template(template);
+                                this.projectTemplate = template ? new Template(template) : undefined;
 
                                 let subMenus = 
                                     (!this.projectTemplate) 
