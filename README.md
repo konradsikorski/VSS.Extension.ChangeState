@@ -1,6 +1,6 @@
 # VSS.Extension.ChangeState
-## Visual Studio Extension
-This is extension for Visual Studio which can be installed from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=konradsikorski.change-status).
+
+This is an extension for Visual Studio Team Services and Team Foundation Server. It can be installed from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=konradsikorski.change-status).
 
 ## Overview
 Change state for many work items at once from context menu. 
