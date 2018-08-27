@@ -23,7 +23,8 @@ export class TemplateLogic {
                             .then((projectTemplateValue: string) => 
                             {
                                 console.log(Date.now() + ": template name from cache: " + projectTemplateValue);                 
-                        
+                                if(!projectTemplateValue) return undefined;
+                                
                                 return <TemplateDetails>{
                                     name: projectTemplateValue,
                                     id: undefined
