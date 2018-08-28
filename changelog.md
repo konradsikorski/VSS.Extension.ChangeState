@@ -1,6 +1,18 @@
 ## Changelog
 
+### v. 1.4
+
+#### New
+
++ Support custom project templates
++ Store project template in browser cookies thanks that the state menu is showing immediately
+
+#### Update
+
++ Simplified template structure
+
 ### v. 1.3
+
 #### New
 
 + Switch to TypeScript
@@ -13,16 +25,19 @@
 + Do not update 'Reason' field manually
 
 ### v. 1.1.1
+
 #### Fix
 
 + Hardcoded template name in changeState method
 
 ### v. 1.1
+
 #### New
 
 + For unsupported project templates show project template selection menu
 
 ### v. 1.0
+
 #### New
 
 + First release

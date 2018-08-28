@@ -8,6 +8,9 @@
         "outFile": "./src/app.js",
         "removeComments": true,
         "noImplicitAny": true,
+        "noImplicitReturns" : true,
+        // turn strict on to check errors
+        "strict" : false,
         "skipLibCheck": true,
         // "outDir": "build/",
         "watch": true,

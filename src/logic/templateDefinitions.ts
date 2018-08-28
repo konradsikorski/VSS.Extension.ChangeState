@@ -11,7 +11,7 @@ export class TemplateDefinitions{
         this.templates["Scrum"] = new ScrumTemplate();
     }
 
-    public getTemplate(templateName: string):IPromise<Template>{
-        return Q(this.templates[templateName]);
+    public getTemplate(templateName: string):Template{
+        return this.templates[templateName];
     }
 }
