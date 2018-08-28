@@ -1,6 +1,6 @@
 ## Changelog
 
-### v. 1.4
+### v. 2.0
 
 #### New
 
@@ -9,7 +9,7 @@
 
 #### Update
 
-+ Simplified template structure
++ Performance improvments
 
 ### v. 1.3
 
