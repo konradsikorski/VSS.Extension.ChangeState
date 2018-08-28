@@ -30,10 +30,10 @@ export class MenuHandler{
         return <IContributedMenuSource> {
             getMenuItems: (actionContext: any)  => {
                 return this.menuHandlerStart()
-                    .then(() => {
-                        let subMenus = (!this.projectTemplate) 
+                    .then( projectTemplate => {
+                        let subMenus = (!projectTemplate) 
                             ? this.buildSelectProjectTemplateMenu() 
-                            : this.buildStatesMenu(actionContext, this.projectTemplate);
+                            : this.buildStatesMenu(actionContext, projectTemplate);
 
                         return this.buildMainMenu(subMenus);
                     });
