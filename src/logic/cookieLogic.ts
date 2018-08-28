@@ -1,8 +1,8 @@
 import { ITemplate } from "./templates/core";
 
 export class CookieLogic { 
-    public static saveProjectTemplate(projectId: string, template: ITemplate) {
-        let expiration = CookieLogic.calculateExpirationDate(7);
+    public static saveProjectTemplate(projectId: string, template: ITemplate, daysToExpire: number = 30) {
+        let expiration = CookieLogic.calculateExpirationDate(daysToExpire);
         document.cookie = `${projectId}=${JSON.stringify(template)}; expires=${expiration.toGMTString()}`;
     }
 

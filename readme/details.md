@@ -1,6 +1,6 @@
 ## Overview
 
-Change state for many work items at once from context menu. 
+Change state for many work items at once from context menu.
 
 1. Select one or more work items on your baclkog or query result
 2. Right click on selected element

@@ -147,10 +147,7 @@ export class MenuHandler{
     }
 
     private selectProjectTemplate(templateName: string){
-        this.templateLogic.selectProjectTemplate(templateName)
-            .then( templateName =>{
-                this.templateDefinitions.getTemplate(templateName)
-                    .then( template => this.projectTemplate = template)
-            });
+        this.templateDefinitions.getTemplate(templateName)
+            .then( template => this.projectTemplate = template)
     }
 }      
