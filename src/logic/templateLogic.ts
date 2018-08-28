@@ -8,7 +8,7 @@ export interface TemplateDetails{
 }
 
 export class TemplateLogic {
-    public getCurrentProjectTemplateName(projectId: string) : PromiseLike<TemplateDetails> {
+    public static getCurrentProjectTemplateName(projectId: string) : PromiseLike<TemplateDetails> {
         return this.getProjectTemplate(projectId)
             .then((template: TemplateDetails) => {
                 if(!template) console.warn("Cannot retrive template");
@@ -16,7 +16,7 @@ export class TemplateLogic {
             });
     }
 
-    private getProjectTemplate(projectId: string): Promise<TemplateDetails>{
+    private static getProjectTemplate(projectId: string): Promise<TemplateDetails>{
         let deferredPromise = Q.defer<TemplateDetails>();
 
         VSS.require(["TFS/Core/RestClient"], (TFS_Wit_WebApi: any) => {

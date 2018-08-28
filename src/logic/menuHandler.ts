@@ -8,11 +8,8 @@ import Q = require("q");
 
 export class MenuHandler{
     projectId: string;
-    projectTemplateDetails?: TemplateDetails = undefined;
     _projectTemplate? : Template = undefined;
     templateDefinitions: TemplateDefinitions = new TemplateDefinitions();
-    templateLogic: TemplateLogic = new TemplateLogic();
-    getCurrentProjectTemplatePromise: PromiseLike<void>;
 
     constructor()
     {
@@ -34,50 +31,39 @@ export class MenuHandler{
             getMenuItems: (actionContext: any)  => {
                 return this.menuHandlerStart()
                     .then(() => {
-                        if(this.projectTemplate) {
-                            let subMenus = this.buildStatesMenu(actionContext, this.projectTemplate);
-                            return this.buildMainMenu(subMenus);
-                        }
-                        else {
-                            return WorkItemTypeLogic.getProjectTemplateDetails(this.projectId).then( (template) => {
-                                this.projectTemplate = template ? new Template(template) : undefined;
+                        let subMenus = (!this.projectTemplate) 
+                            ? this.buildSelectProjectTemplateMenu() 
+                            : this.buildStatesMenu(actionContext, this.projectTemplate);
 
-                                let subMenus = 
-                                    (!this.projectTemplate) 
-                                        ? this.buildSelectProjectTemplateMenu() 
-                                        : this.buildStatesMenu(actionContext, this.projectTemplate);
-
-                                return this.buildMainMenu(subMenus);
-                            });
-                        }
+                        return this.buildMainMenu(subMenus);
                     });
             }
         };
     }
 
-    private menuHandlerStart() : IPromise<void>
+    private menuHandlerStart() : IPromise<Template>
     {
         // try get the template from cookies
         let templateFromCookie = CookieLogic.getProjectTemplate(this.projectId);
         if(templateFromCookie){
-            console.log( "Project template loaded from cookie2");
+            console.log( "Project template loaded from cookie");
             this._projectTemplate = new Template(templateFromCookie);
-            this.getCurrentProjectTemplatePromise = Q.resolve<void>()
-            return this.getCurrentProjectTemplatePromise;
+            return Q.resolve(this._projectTemplate)
         }
-        
-        // if template doesnt exists in coockies then start standard procedure
-        return this.getCurrentProjectTemplatePromise = 
-            this.templateLogic.getCurrentProjectTemplateName(this.projectId)
-                .then(templateDetails => {
-                    if (!templateDetails) return;
 
-                    this.projectTemplateDetails = templateDetails;
-                    this.templateDefinitions.getTemplate(templateDetails.name)
-                    .then( template => {
-                        this.projectTemplate = template;  
-                    });
-                });
+        return TemplateLogic.getCurrentProjectTemplateName(this.projectId)
+            .then(templateDetails => {
+                this.projectTemplate = this.templateDefinitions.getTemplate(templateDetails.name);
+                
+                if(this.projectTemplate) return this.projectTemplate
+                else {
+                    return WorkItemTypeLogic.getProjectTemplateDetails(this.projectId)
+                        .then( (templateWorkItem) => {
+                            this.projectTemplate = templateWorkItem ? new Template(templateWorkItem) : undefined;
+                            return this.projectTemplate;
+                        })
+                }
+            });
     }
     
     private buildMainMenu(subMenus: IContributedMenuItem[]) :Array<IContributedMenuItem>
@@ -147,7 +133,6 @@ export class MenuHandler{
     }
 
     private selectProjectTemplate(templateName: string){
-        this.templateDefinitions.getTemplate(templateName)
-            .then( template => this.projectTemplate = template)
+        this.projectTemplate = this.templateDefinitions.getTemplate(templateName);
     }
 }      
