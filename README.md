@@ -26,10 +26,6 @@ Change state for many work items at once from context menu.
 
 ## Details
 
-### Available states
-
-List of states will contains only these allowed by workflow. So for example if current work item state is 'Removed' then the menu will contains only 'New' option because other are not allowed.
-
 ### Selecting many items
 
 If you select items of different types then list of available states will be narrowed to the common of all of theme. If no state is available then '(empty)' text will be shown on the list.
