@@ -1,169 +1,53 @@
 import {Template, ITemplate} from "./core"
 
-let agileTemplate : ITemplate = 
-{
+let agileTemplate : ITemplate = {
     // work item
-    "Epic": 
-        {
-            // from state
-            "New": [
-                // to state
-                "Active",
-                "Resolved",
-                "Closed",
-                "Removed"
-            ], 
-            "Active": [
-                "New",
-                "Resolved",
-                "Closed",
-                "Removed"
-            ],  
-            "Resolved": [
-                "New",
-                "Active",
-                "Closed",
-                "Removed"
-            ], 
-            "Closed": [
-                "New",
-                "Active",
-                "Resolved",
-            ],
-            "Removed": [
-                "New"
-            ]
-        },
-    "Feature": 
-        {
-            "New": [
-                "Active",
-                "Resolved",
-                "Closed",
-                "Removed"
-            ], 
-            "Active": [
-                "New",
-                "Resolved",
-                "Closed",
-                "Removed",
-            ],  
-            "Resolved": [
-                "New",
-                "Active",
-                "Closed",
-                "Removed",
-            ], 
-            "Closed": [
-                "New",
-                "Active" ,
-                "Resolved",
-            ],
-            "Removed": [
-                "New",
-            ]
-        },
-    "User Story": 
-        {
-            "New": [
-                "Active",
-                "Resolved",
-                "Closed",
-                "Removed"
-            ], 
-            "Active": [
-                "New",
-                "Resolved",
-                "Closed",
-                "Removed",
-            ],  
-            "Resolved": [
-                "New",
-                "Active" ,
-                "Closed",
-                "Removed",
-            ], 
-            "Closed": [
-                "New",
-                "Active" ,
-                "Resolved",
-            ],
-            "Removed": [
-                "New",
-            ]
-        },
-    "Task": 
-        {
-            "New": [
-                "Active",
-                "Closed",
-                "Removed"
-            ], 
-            "Active": [
-                "New",
-                "Closed",
-                "Removed",
-            ], 
-            "Closed": [
-                "New",
-                "Active",
-                "Removed"
-            ],
-            "Removed": [
-                "New",
-            ]
-        },
-    "Bug": 
-        {
-            "New": [
-                "Active",
-                "Resolved",
-                "Closed"
-            ], 
-            "Active": [
-                "New",
-                "Resolved",
-                "Closed"
-            ],  
-            "Resolved": [
-                "New",
-                "Active",
-                "Closed"
-            ], 
-            "Closed": [
-                "New",
-                "Active",
-                "Resolved",
-            ]
-        },
-    "Issue": 
-        {
-            "Active": [
-                "Closed"
-            ],
-            "Closed": [
-                "Active"
-            ]
-        },
-    "Test Case": 
-        {
-            "Design": [
-                "Ready",
-                "Closed"
-            ], 
-            "Ready": [
-                "Design",
-                "Closed"
-            ],
-            "Closed": [
-                "Design",
-                "Ready"
-            ]
-        }
+    "Epic": [ // states
+            "New",
+            "Active",
+            "Resolved",
+            "Closed",
+            "Removed"
+        ],
+    "Feature": [
+            "New",
+            "Active", 
+            "Resolved", 
+            "Closed",
+            "Removed"
+        ],
+    "User Story": [
+            "New", 
+            "Active", 
+            "Resolved",
+            "Closed",
+            "Removed"
+        ],
+    "Task": [
+            "New",
+            "Active",
+            "Closed",
+            "Removed"
+        ],
+    "Bug": [
+            "New",
+            "Active", 
+            "Resolved",
+            "Closed"
+        ],
+    "Issue": [
+            "Active",
+            "Closed"
+        ],
+    "Test Case": [
+            "Design",
+            "Ready",
+            "Closed"
+        ]
 }
 
 export class AgileTemplate extends Template {
     constructor(){
-        super("Agile", agileTemplate);
+        super(agileTemplate, "Agile");
     } 
 }

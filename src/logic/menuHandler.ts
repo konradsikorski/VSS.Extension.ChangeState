@@ -1,52 +1,80 @@
 import {StateLogic} from "./statesLogic"
-import {TemplateLogic} from "./templateLogic"
+import {TemplateLogic, TemplateDetails} from "./templateLogic"
 import {TemplateDefinitions} from "./templateDefinitions"
+import {WorkItemTypeLogic} from "./workItemTypesLogic"
 import {Template} from "./templates/core"
-
-import TFS_Wit_Services = require("TFS/WorkItemTracking/Services");
-import VSS_Extension_Service = require("VSS/SDK/Services/ExtensionData");
+import { CookieLogic } from "./cookieLogic";
+import Q = require("q");
 
 export class MenuHandler{
-    projectTemplateName: string;
-    projectTemplate : Template;
+    projectId: string;
+    _projectTemplate? : Template = undefined;
     templateDefinitions: TemplateDefinitions = new TemplateDefinitions();
-    templateLogic: TemplateLogic = new TemplateLogic();
-    getCurrentProjectTemplatePromise: PromiseLike<void>;
 
     constructor()
     {
-        this.getCurrentProjectTemplatePromise = 
-            this.templateLogic.getCurrentProjectTemplateName()
-                .then(templateName => {
-                    this.projectTemplateName = templateName;
-                    this.templateDefinitions.getTemplate(templateName)
-                    .then( template => {
-                      this.projectTemplate = template;  
-                    });
-                });
+        let context = VSS.getWebContext();
+        this.projectId = context.project.id;
+    }
+
+    get projectTemplate(): Template{
+        return this._projectTemplate;
+    }
+
+    set projectTemplate(template : Template) {
+        if(template) CookieLogic.saveProjectTemplate(this.projectId, template.template);
+        this._projectTemplate = template;
     }
 
     changeStateMenuHandler = (context: any) : IContributedMenuSource => {
         return <IContributedMenuSource> {
             getMenuItems: (actionContext: any)  => {
-                return this.getCurrentProjectTemplatePromise
-                    .then(() => {
-                            let subMenus = 
-                                (!this.projectTemplate) 
-                                    ? this.buildSelectProjectTemplateMenu() 
-                                    : this.buildStatesMenu(actionContext, this.projectTemplate);
-                            
-                            return new Array<IContributedMenuItem>(
-                                {
-                                    text: "Change state",
-                                    groupId: "modify",
-                                    icon: "static/images/changeStatusAction.png",
-                                    childItems: subMenus,
-                                }
-                            );
-                        });
-                    }
-            };
+                return this.menuHandlerStart()
+                    .then( projectTemplate => {
+                        let subMenus = (!projectTemplate) 
+                            ? this.buildSelectProjectTemplateMenu() 
+                            : this.buildStatesMenu(actionContext, projectTemplate);
+
+                        return this.buildMainMenu(subMenus);
+                    });
+            }
+        };
+    }
+
+    private menuHandlerStart() : IPromise<Template>
+    {
+        // try get the template from cookies
+        let templateFromCookie = CookieLogic.getProjectTemplate(this.projectId);
+        if(templateFromCookie){
+            console.log( "Project template loaded from cookie");
+            this._projectTemplate = new Template(templateFromCookie);
+            return Q.resolve(this._projectTemplate)
+        }
+
+        return TemplateLogic.getCurrentProjectTemplateName(this.projectId)
+            .then(templateDetails => {
+                this.projectTemplate = this.templateDefinitions.getTemplate(templateDetails.name);
+                
+                if(this.projectTemplate) return this.projectTemplate
+                else {
+                    return WorkItemTypeLogic.getProjectTemplateDetails(this.projectId)
+                        .then( (templateWorkItem) => {
+                            this.projectTemplate = templateWorkItem ? new Template(templateWorkItem) : undefined;
+                            return this.projectTemplate;
+                        })
+                }
+            });
+    }
+    
+    private buildMainMenu(subMenus: IContributedMenuItem[]) :Array<IContributedMenuItem>
+    {
+        return new Array<IContributedMenuItem>(
+            {
+                text: "Change state",
+                groupId: "modify",
+                icon: "static/images/changeStatusAction.png",
+                childItems: subMenus,
+            });
     }
 
     private buildSelectProjectTemplateMenu(): IContributedMenuItem[]{
@@ -72,21 +100,32 @@ export class MenuHandler{
     }
 
     private buildStatesMenu(actionContext: any, template: Template) : IContributedMenuItem[]{
-        let ids = actionContext.ids || actionContext.workItemIds;
+        let ids = <number[]>(actionContext.ids || actionContext.workItemIds);
         let subMenus = new Array<IContributedMenuItem>();
-        
+        const icons = ["Active", "Approved", "Closed", "Committed", "Design", "Done", "InProgress", 
+            "New", "Open", "Ready", "Removed", "Resolved", "ToDo"];
+                
         let selectedItemsTypes = actionContext.workItemTypeNames;
         let commonStatuses = StateLogic.getCommonStatuses(template, selectedItemsTypes);
         
         for(let i = 0; i < commonStatuses.length; ++i){
             let state = commonStatuses[i];
+            let icon = state.replace(' ', '');
 
             subMenus.push( {
                 text: state,
-                icon: `static/images/status${state.replace(' ', '')}.png`,
+                icon: icons.indexOf(icon) >= 0 ? `static/images/status${icon}.png` : undefined,
                 action: (actionContext: any) => {
                     StateLogic.changeStatus(ids, template, state);
                 }
+            });
+        }
+
+        if(subMenus.length == 0) {
+            subMenus.push({
+                text: '(empty)',
+                noIcon: true,
+                disabled: true
             });
         }
 
@@ -94,10 +133,6 @@ export class MenuHandler{
     }
 
     private selectProjectTemplate(templateName: string){
-        this.templateLogic.selectProjectTemplate(templateName)
-            .then( templateName =>{
-                this.templateDefinitions.getTemplate(templateName)
-                    .then( template => this.projectTemplate = template)
-            });
+        this.projectTemplate = this.templateDefinitions.getTemplate(templateName);
     }
 }      

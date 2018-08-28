@@ -1,6 +1,6 @@
 ## Overview
 
-Change state for many work items at once from context menu. 
+Change state for many work items at once from context menu.
 
 1. Select one or more work items on your baclkog or query result
 2. Right click on selected element
@@ -34,10 +34,10 @@ After changing the state the view will not be refreshed, you have to refresh the
 
 ### Supported projects
 
-For now only `Agile` and `Scrum` project templates are supported.
+Extension is working for built-in and custom project templates. For custom project templates options for state menu will be sorted alphabetically and may have no icons.
 
 ## Project Template Selection
 
-If your project template is different than `Agile` or `Scrum` (or derives from) or extension was not able to get information about your current project template then you will see an option to select the project template like this (you have to set it only once):
+If  extension will not be able to get information about your current project template then you will see an option to select the project template like this (you have to set it only once):
 
 ![selectTemplate](/readme/img/selectTemplate.png)
