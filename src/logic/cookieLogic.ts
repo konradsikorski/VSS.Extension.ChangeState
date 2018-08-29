@@ -4,6 +4,7 @@ export class CookieLogic {
     public static saveProjectTemplate(projectId: string, template: ITemplate, daysToExpire: number = 30) {
         let expiration = CookieLogic.calculateExpirationDate(daysToExpire);
         document.cookie = `${projectId}=${JSON.stringify(template)}; expires=${expiration.toGMTString()}`;
+        console.log('Project template saved in cookie');
     }
 
     public static getProjectTemplate(projectId: string) : ITemplate{

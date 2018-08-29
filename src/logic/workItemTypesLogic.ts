@@ -5,6 +5,7 @@ import Q = require("q");
 
 export class WorkItemTypeLogic {    
     public static getProjectTemplateDetails(projectId: string): IPromise<ITemplate> {
+        console.log("Trying to retrive Work Item Types from VSTS");
         let deferredPromise = Q.defer<ITemplate>();
         
         VSS.require(["TFS/WorkItemTracking/RestClient"], (restClient: any) => {

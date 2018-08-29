@@ -1,5 +1,5 @@
 import {TeamProject} from "TFS/Core/Contracts"
-import VSS_Extension_Service = require("VSS/SDK/Services/ExtensionData");
+import { CoreHttpClient4_1 } from "TFS/Core/RestClient";
 import Q = require("q");
 
 export interface TemplateDetails{
@@ -20,7 +20,7 @@ export class TemplateLogic {
         let deferredPromise = Q.defer<TemplateDetails>();
 
         VSS.require(["TFS/Core/RestClient"], (TFS_Wit_WebApi: any) => {
-            let client = TFS_Wit_WebApi.getClient();
+            let client = <CoreHttpClient4_1>TFS_Wit_WebApi.getClient();
             client.getProject(projectId, true).then(
                 (project: TeamProject) => {
                     let template = project.capabilities.processTemplate ?
