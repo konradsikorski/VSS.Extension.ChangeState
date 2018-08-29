@@ -53,13 +53,14 @@ export class MenuHandler{
 
         return TemplateLogic.getCurrentProjectTemplateName(this.projectId)
             .then(templateDetails => {
-                this.projectTemplate = this.templateDefinitions.getTemplate(templateDetails.name);
+                this.projectTemplate = this.templateDefinitions.getTemplate(templateDetails && templateDetails.name);
                 
                 if(this.projectTemplate) return this.projectTemplate
                 else {
                     return WorkItemTypeLogic.getProjectTemplateDetails(this.projectId)
                         .then( (templateWorkItem) => {
                             this.projectTemplate = templateWorkItem ? new Template(templateWorkItem) : undefined;
+                            console.log(`Project template created form Work Item Types: ${this.projectTemplate != undefined}`);
                             return this.projectTemplate;
                         })
                 }

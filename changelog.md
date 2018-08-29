@@ -1,5 +1,11 @@
 ## Changelog
 
+### v. 2.2
+
+#### Fix
+
++ When extension would not be able to retrive project template is not trying to ask for Work Item Types
+
 ### v. 2.0
 
 #### New

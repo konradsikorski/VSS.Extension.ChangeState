@@ -12,6 +12,8 @@ export class TemplateDefinitions{
     }
 
     public getTemplate(templateName: string):Template{
-        return this.templates[templateName];
+        return templateName 
+            ? this.templates[templateName]
+            : undefined;
     }
 }
