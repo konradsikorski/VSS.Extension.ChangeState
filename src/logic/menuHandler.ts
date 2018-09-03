@@ -5,6 +5,7 @@ import {WorkItemTypeLogic} from "./workItemTypesLogic"
 import {Template} from "./templates/core"
 import { CookieLogic } from "./cookieLogic";
 import Q = require("q");
+import { ActionContextWrapper } from "./actionContextWrapper";
 
 export class MenuHandler{
     projectId: string;
@@ -101,15 +102,16 @@ export class MenuHandler{
     }
 
     private buildStatesMenu(actionContext: any, template: Template) : IContributedMenuItem[]{
-        let ids = <number[]>(actionContext.ids || actionContext.workItemIds);
+        let ids = ActionContextWrapper.GetWorkItemIds(actionContext);
+
         let subMenus = new Array<IContributedMenuItem>();
         const icons = ["Active", "Approved", "Closed", "Committed", "Design", "Done", "InProgress", 
             "New", "Open", "Ready", "Removed", "Resolved", "ToDo"];
                 
-        let selectedItemsTypes = actionContext.workItemTypeNames;
+        let selectedItemsTypes = ActionContextWrapper.GetWorkItemTypes(actionContext);
         let commonStatuses = StateLogic.getCommonStatuses(template, selectedItemsTypes);
         
-        for(let i = 0; i < commonStatuses.length; ++i){
+        for (let i = 0; i < commonStatuses.length; ++i){
             let state = commonStatuses[i];
             let icon = state.replace(' ', '');
 
