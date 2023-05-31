@@ -1,5 +1,10 @@
 ## Changelog
 
+### v. 2.4.2
+
++ Remove using cookies for caching data and use local static variable instead
++ Extension stopped working on DevOps, this change should help
+
 ### v. 2.3
 
 + Support Taskboard and Bord views
