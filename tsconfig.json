@@ -3,21 +3,21 @@
     "compilerOptions": {
         "module": "amd",
         "moduleResolution": "node",
-        "target": "es5",
+        "target": "es6",
         "sourceMap": false,
         "outFile": "./src/app.js",
         "removeComments": true,
         "noImplicitAny": true,
-        "noImplicitReturns" : true,
+        "noImplicitReturns": true,
         // turn strict on to check errors
-        "strict" : false,
+        "strict": false,
         "skipLibCheck": true,
         // "outDir": "build/",
-        "watch": true,
+        // "watch": true,
         "rootDir": "./",
         "types": [
             "vss-web-extension-sdk"
-        ]	
+        ]
     },
     "include": [
         "src/**/*"
