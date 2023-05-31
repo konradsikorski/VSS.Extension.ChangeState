@@ -2,11 +2,10 @@
   "name": "vss.extension.changestate",
   "version": "1.0.0",
   "dependencies": {
-    "vss-web-extension-sdk": "^5.134.0"
+    "vss-web-extension-sdk": "^5.141.0"
   },
   "devDependencies": {
-    "@types/q": "^1.5.0",
     "tfx-cli": "^0.14.0",
-    "typescript": "^2.9.2"
+    "typescript": "^5.0.4"
   }
 }
