@@ -1,83 +1,100 @@
 {
-    "version": "0.1.0",
+    "version": "2.0.0",
     "runner": "terminal",  
 
     "tasks": [
         {
-            "taskName": "build",
+            "label": "build",
+            "type": "shell",
             "command": "tsc",
-            "isShellCommand": true,
-            "showOutput": "always",
-            // "showOutput": "silent",
-            "echoCommand": true,
-            "isBuildCommand": true,
-            // "args": ["-w", "-p", "."],
-            "problemMatcher": "$tsc-watch"
+            "problemMatcher": "$tsc-watch",
+            "group": {
+                "_id": "build",
+                "isDefault": false
+            }
         },
         {
-            "taskName": "build-dev",
+            "label": "build-dev",
+            "type": "shell",
             "command": "tsc",
-            "isShellCommand": true,
-            "showOutput": "always",
-            // "showOutput": "silent",
-            "echoCommand": true,
-            "isBuildCommand": true,
-            "args": ["-p", "./tsconfig.DEV.json"],
-            "problemMatcher": "$tsc-watch"
+            "args": [
+                "-p",
+                "./tsconfig.DEV.json"
+            ],
+            "problemMatcher": "$tsc-watch",
+            "group": {
+                "_id": "build",
+                "isDefault": false
+            }
         },
         {
-            "taskName": "login",
+            "label": "login",
+            "type": "shell",
             "command": "tfx",
-            "isShellCommand": true,
-            "showOutput": "always",
-            "echoCommand": true,
-            "isBuildCommand": false,
             "args": [
-                "login", "--service-url",  "https://marketplace.visualstudio.com"
-            ]
+                "login",
+                "--service-url",
+                "https://marketplace.visualstudio.com"
+            ],
+            "problemMatcher": []
         },
         {
-            "taskName": "package",
+            "label": "package",
+            "type": "shell",
             "command": "tfx",
-            "isShellCommand": true,
-            "showOutput": "always",
-            "echoCommand": true,
-            "isBuildCommand": false,
             "args": [
-                "extension", "create",  "--output-path", "package"
-            ]
+                "extension",
+                "create",
+                "--output-path",
+                "package"
+            ],
+            "problemMatcher": []
         },
         {
-            "taskName": "package-dev",
+            "label": "package-dev",
+            "type": "shell",
             "command": "tfx",
-            "isShellCommand": true,
-            "showOutput": "always",
-            "echoCommand": true,
-            "isBuildCommand": false,
-          
             "args": [
-                "extension", "create",  "--output-path", "package", "--rev-version", "--overrides-file", ".\\vss-extension.DEV.json"
-            ]
+                "extension",
+                "create",
+                "--output-path",
+                "package",
+                "--rev-version",
+                "--overrides-file",
+                ".\\vss-extension.DEV.json"
+            ],
+            "problemMatcher": []
         },
         {
-            "taskName": "publish",
+            "label": "publish",
+            "type": "shell",
             "command": "tfx",
-            "isShellCommand": true,
-            "showOutput": "always",
-            "echoCommand": false,
             "args": [
-                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com",  "--output-path", "package"
-            ]
+                "extension",
+                "publish",
+                "--service-url",
+                "https://marketplace.visualstudio.com",
+                "--output-path",
+                "package"
+            ],
+            "problemMatcher": []
         },
         {
-            "taskName": "publish-dev",
+            "label": "publish-dev",
+            "type": "shell",
             "command": "tfx",
-            "isShellCommand": true,
-            "showOutput": "always",
-            "echoCommand": false,
             "args": [
-                "extension", "publish", "--service-url", "https://marketplace.visualstudio.com", "--rev-version", "--output-path", "package", "--overrides-file", ".\\vss-extension.DEV.json"
-            ]
+                "extension",
+                "publish",
+                "--service-url",
+                "https://marketplace.visualstudio.com",
+                "--rev-version",
+                "--output-path",
+                "package",
+                "--overrides-file",
+                ".\\vss-extension.DEV.json"
+            ],
+            "problemMatcher": []
         }
     ]
 }
