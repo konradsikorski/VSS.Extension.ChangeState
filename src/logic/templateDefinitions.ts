@@ -1,7 +1,6 @@
 import { Template, TemplateCollection, ITemplate } from "./templates/core"
 import { AgileTemplate } from "./templates/templateAgile"
 import { ScrumTemplate } from "./templates/templateScrum"
-import Q = require("q");
 
 export class TemplateDefinitions{
     private templates: TemplateCollection = {};

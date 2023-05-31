@@ -1,39 +1,37 @@
-import {StateLogic} from "./statesLogic"
-import {TemplateLogic, TemplateDetails} from "./templateLogic"
-import {TemplateDefinitions} from "./templateDefinitions"
-import {WorkItemTypeLogic} from "./workItemTypesLogic"
-import {Template} from "./templates/core"
+import { StateLogic } from "./statesLogic"
+import { TemplateLogic, TemplateDetails } from "./templateLogic"
+import { TemplateDefinitions } from "./templateDefinitions"
+import { WorkItemTypeLogic } from "./workItemTypesLogic"
+import { Template } from "./templates/core"
 import { CookieLogic } from "./cookieLogic";
-import Q = require("q");
 import { ActionContextWrapper } from "./actionContextWrapper";
 
-export class MenuHandler{
+export class MenuHandler {
     projectId: string;
-    _projectTemplate? : Template = undefined;
+    _projectTemplate?: Template = undefined;
     templateDefinitions: TemplateDefinitions = new TemplateDefinitions();
 
-    constructor()
-    {
+    constructor() {
         let context = VSS.getWebContext();
         this.projectId = context.project.id;
     }
 
-    get projectTemplate(): Template{
+    get projectTemplate(): Template {
         return this._projectTemplate;
     }
 
-    set projectTemplate(template : Template) {
-        if(template) CookieLogic.saveProjectTemplate(this.projectId, template.template);
+    set projectTemplate(template: Template) {
+        if (template) CookieLogic.saveProjectTemplate(this.projectId, template.template);
         this._projectTemplate = template;
     }
 
-    changeStateMenuHandler = (context: any) : IContributedMenuSource => {
-        return <IContributedMenuSource> {
-            getMenuItems: (actionContext: any)  => {
+    changeStateMenuHandler = (context: any): IContributedMenuSource => {
+        return <IContributedMenuSource>{
+            getMenuItems: (actionContext: any) => {
                 return this.menuHandlerStart()
-                    .then( projectTemplate => {
-                        let subMenus = (!projectTemplate) 
-                            ? this.buildSelectProjectTemplateMenu() 
+                    .then(projectTemplate => {
+                        let subMenus = (!projectTemplate)
+                            ? this.buildSelectProjectTemplateMenu()
                             : this.buildStatesMenu(actionContext, projectTemplate);
 
                         return this.buildMainMenu(subMenus);
@@ -42,24 +40,23 @@ export class MenuHandler{
         };
     }
 
-    private menuHandlerStart() : IPromise<Template>
-    {
-        // try get the template from cookies
-        let templateFromCookie = CookieLogic.getProjectTemplate(this.projectId);
-        if(templateFromCookie){
-            console.log( "Project template loaded from cookie");
-            this._projectTemplate = new Template(templateFromCookie);
-            return Q.resolve(this._projectTemplate)
+    private menuHandlerStart(): IPromise<Template> {
+        // try get the template from cache
+        let templateFromCache = CookieLogic.getProjectTemplate(this.projectId);
+        if (templateFromCache) {
+            console.log("Project template loaded from cache");
+            this._projectTemplate = new Template(templateFromCache);
+            return Promise.resolve(this._projectTemplate);
         }
 
         return TemplateLogic.getCurrentProjectTemplateName(this.projectId)
             .then(templateDetails => {
                 this.projectTemplate = this.templateDefinitions.getTemplate(templateDetails && templateDetails.name);
-                
-                if(this.projectTemplate) return this.projectTemplate
+
+                if (this.projectTemplate) return this.projectTemplate
                 else {
                     return WorkItemTypeLogic.getProjectTemplateDetails(this.projectId)
-                        .then( (templateWorkItem) => {
+                        .then((templateWorkItem) => {
                             this.projectTemplate = templateWorkItem ? new Template(templateWorkItem) : undefined;
                             console.log(`Project template created form Work Item Types: ${this.projectTemplate != undefined}`);
                             return this.projectTemplate;
@@ -67,9 +64,8 @@ export class MenuHandler{
                 }
             });
     }
-    
-    private buildMainMenu(subMenus: IContributedMenuItem[]) :Array<IContributedMenuItem>
-    {
+
+    private buildMainMenu(subMenus: IContributedMenuItem[]): Array<IContributedMenuItem> {
         return new Array<IContributedMenuItem>(
             {
                 text: "Change state",
@@ -79,7 +75,7 @@ export class MenuHandler{
             });
     }
 
-    private buildSelectProjectTemplateMenu(): IContributedMenuItem[]{
+    private buildSelectProjectTemplateMenu(): IContributedMenuItem[] {
         return [
             {
                 text: "What is your project template?",
@@ -101,21 +97,21 @@ export class MenuHandler{
         ];
     }
 
-    private buildStatesMenu(actionContext: any, template: Template) : IContributedMenuItem[]{
+    private buildStatesMenu(actionContext: any, template: Template): IContributedMenuItem[] {
         let ids = ActionContextWrapper.GetWorkItemIds(actionContext);
 
         let subMenus = new Array<IContributedMenuItem>();
-        const icons = ["Active", "Approved", "Closed", "Committed", "Design", "Done", "InProgress", 
+        const icons = ["Active", "Approved", "Closed", "Committed", "Design", "Done", "InProgress",
             "New", "Open", "Ready", "Removed", "Resolved", "ToDo"];
-                
+
         let selectedItemsTypes = ActionContextWrapper.GetWorkItemTypes(actionContext);
         let commonStatuses = StateLogic.getCommonStatuses(template, selectedItemsTypes);
-        
-        for (let i = 0; i < commonStatuses.length; ++i){
+
+        for (let i = 0; i < commonStatuses.length; ++i) {
             let state = commonStatuses[i];
             let icon = state.replace(' ', '');
 
-            subMenus.push( {
+            subMenus.push({
                 text: state,
                 icon: icons.indexOf(icon) >= 0 ? `static/images/status${icon}.png` : undefined,
                 action: (actionContext: any) => {
@@ -124,7 +120,7 @@ export class MenuHandler{
             });
         }
 
-        if(subMenus.length == 0) {
+        if (subMenus.length == 0) {
             subMenus.push({
                 text: '(empty)',
                 noIcon: true,
@@ -135,7 +131,7 @@ export class MenuHandler{
         return subMenus;
     }
 
-    private selectProjectTemplate(templateName: string){
+    private selectProjectTemplate(templateName: string) {
         this.projectTemplate = this.templateDefinitions.getTemplate(templateName);
     }
 }      
