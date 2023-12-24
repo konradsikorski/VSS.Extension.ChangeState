@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "change-status",
-    "version": "2.4.2",
+    "version": "2.6.0",
     "name": "Change State",
     "description": "Change state for many work items at once from context menu",
     "publisher": "KonradSikorski",
@@ -64,7 +64,7 @@
             "description": "Change state selected items",
             "targets": [
                 "ms.vss-work-web.backlog-item-menu",
-                "ms.vss-work-web.work-item-context-menu"
+                "ms.vss-work-web.query-result-work-item-menu"
             ],
             "properties": {
                 "group": "contributed",

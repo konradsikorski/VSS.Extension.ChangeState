@@ -1,100 +1,100 @@
-{
-    "version": "2.0.0",
-    "runner": "terminal",  
+    {
+        "version": "2.0.0",
+        "runner": "terminal",  
 
-    "tasks": [
-        {
-            "label": "build",
-            "type": "shell",
-            "command": "tsc",
-            "problemMatcher": "$tsc-watch",
-            "group": {
-                "_id": "build",
-                "isDefault": false
+        "tasks": [
+            {
+                "label": "build",
+                "type": "shell",
+                "command": "tsc",
+                "problemMatcher": "$tsc-watch",
+                "group": {
+                    "_id": "build",
+                    "isDefault": false
+                }
+            },
+            {
+                "label": "build-dev",
+                "type": "shell",
+                "command": "tsc",
+                "args": [
+                    "-p",
+                    "./tsconfig.DEV.json"
+                ],
+                "problemMatcher": "$tsc-watch",
+                "group": {
+                    "_id": "build",
+                    "isDefault": false
+                }
+            },
+            {
+                "label": "login",
+                "type": "shell",
+                "command": "tfx",
+                "args": [
+                    "login",
+                    "--service-url",
+                    "https://marketplace.visualstudio.com"
+                ],
+                "problemMatcher": []
+            },
+            {
+                "label": "package",
+                "type": "shell",
+                "command": "tfx",
+                "args": [
+                    "extension",
+                    "create",
+                    "--output-path",
+                    "package"
+                ],
+                "problemMatcher": []
+            },
+            {
+                "label": "package-dev",
+                "type": "shell",
+                "command": "tfx",
+                "args": [
+                    "extension",
+                    "create",
+                    "--output-path",
+                    "package",
+                    "--rev-version",
+                    "--overrides-file",
+                    ".\\vss-extension.DEV.json"
+                ],
+                "problemMatcher": []
+            },
+            {
+                "label": "publish",
+                "type": "shell",
+                "command": "tfx",
+                "args": [
+                    "extension",
+                    "publish",
+                    "--service-url",
+                    "https://marketplace.visualstudio.com",
+                    "--output-path",
+                    "package"
+                ],
+                "problemMatcher": []
+            },
+            {
+                "label": "publish-dev",
+                "type": "shell",
+                "command": "tfx",
+                "args": [
+                    "extension",
+                    "publish",
+                    "--service-url",
+                    "https://marketplace.visualstudio.com",
+                    "--rev-version",
+                    "--output-path",
+                    "package",
+                    "--overrides-file",
+                    ".\\vss-extension.DEV.json"
+                ],
+                "problemMatcher": []
             }
-        },
-        {
-            "label": "build-dev",
-            "type": "shell",
-            "command": "tsc",
-            "args": [
-                "-p",
-                "./tsconfig.DEV.json"
-            ],
-            "problemMatcher": "$tsc-watch",
-            "group": {
-                "_id": "build",
-                "isDefault": false
-            }
-        },
-        {
-            "label": "login",
-            "type": "shell",
-            "command": "tfx",
-            "args": [
-                "login",
-                "--service-url",
-                "https://marketplace.visualstudio.com"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "package",
-            "type": "shell",
-            "command": "tfx",
-            "args": [
-                "extension",
-                "create",
-                "--output-path",
-                "package"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "package-dev",
-            "type": "shell",
-            "command": "tfx",
-            "args": [
-                "extension",
-                "create",
-                "--output-path",
-                "package",
-                "--rev-version",
-                "--overrides-file",
-                ".\\vss-extension.DEV.json"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "publish",
-            "type": "shell",
-            "command": "tfx",
-            "args": [
-                "extension",
-                "publish",
-                "--service-url",
-                "https://marketplace.visualstudio.com",
-                "--output-path",
-                "package"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "publish-dev",
-            "type": "shell",
-            "command": "tfx",
-            "args": [
-                "extension",
-                "publish",
-                "--service-url",
-                "https://marketplace.visualstudio.com",
-                "--rev-version",
-                "--output-path",
-                "package",
-                "--overrides-file",
-                ".\\vss-extension.DEV.json"
-            ],
-            "problemMatcher": []
-        }
-    ]
-}
+        ]
+    }
