@@ -1,5 +1,9 @@
 ## Changelog
 
+### v. 2.6.0
+
++ support for new Azure Devops Boards Hub
+
 ### v. 2.4.2
 
 + Remove using cookies for caching data and use local static variable instead
