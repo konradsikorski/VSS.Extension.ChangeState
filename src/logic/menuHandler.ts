@@ -80,7 +80,7 @@ export class MenuHandler {
             text: state,
             icon: this.getIcon(state),
             action: async (actionContext: any) => {
-                await StateLogic.changeStatus(ids, template, state);
+                await StateLogic.changeStatus(ids, state);
             }
         }));
 
@@ -102,9 +102,5 @@ export class MenuHandler {
 
         const icon = state.replace(' ', '');
         return icons.indexOf(icon) >= 0 ? `static/images/status${icon}.png` : undefined
-    }
-
-    private selectProjectTemplate(templateName: string) {
-        this.projectTemplate = this.templateDefinitions.getTemplate(templateName);
     }
 }      
