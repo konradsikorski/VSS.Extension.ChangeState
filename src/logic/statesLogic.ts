@@ -5,20 +5,16 @@ import TFS_Wit_Client = require("TFS/WorkItemTracking/RestClient");
 export class StateLogic {
 
     public static getCommonStatuses(template: Template, workItemTypes: string[]): Array<string>{
-        if(!workItemTypes || workItemTypes.length == 0) return [];
+        if(!workItemTypes || workItemTypes.length === 0) return [];
 
         let states = template.getStatusesForWorkItem(workItemTypes[0]);
 
         // remove uncommon statuses
         for(let i = 1; i < workItemTypes.length; ++i)
         {
-            let statesForType = template.getStatusesForWorkItem(workItemTypes[i]);
+            const statesForType = template.getStatusesForWorkItem(workItemTypes[i]);
 
-            for(let j=0; j<states.length; ++j){
-                if(statesForType.indexOf(states[j]) < 0){
-                    states.splice(j--,1);
-                }
-            }
+            states = states.filter((state: string) => statesForType.includes(state));
         };
 
         return states;
