@@ -25,7 +25,7 @@ export class WorkItemTypeLogic {
         return template;
     }
 
-    private static extractStates(transitions: {[key: string]: WorkItemStateTransition[]}): string[] {
+    private static extractStates(transitions: { [key: string]: WorkItemStateTransition[] }): string[] {
         const states: string[] = [];
 
         for (const state in transitions) {
