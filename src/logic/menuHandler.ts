@@ -26,6 +26,7 @@ export class MenuHandler {
     }
 
     changeStateMenuHandler = (context: any): IContributedMenuSource => {
+        console.log("Extension started");
         return <IContributedMenuSource>{
             getMenuItems: async (actionContext: any) => {
                 const projectTemplate = await this.menuHandlerStart()
