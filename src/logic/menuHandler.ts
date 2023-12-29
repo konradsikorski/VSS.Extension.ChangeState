@@ -14,6 +14,7 @@ export class MenuHandler {
     constructor() {
         let context = VSS.getWebContext();
         this.projectId = context.project.id;
+        this.getMenuItems = this.getMenuItems.bind(this);
     }
 
     get projectTemplate(): Template {
