@@ -1,5 +1,4 @@
-import { TeamProject } from "TFS/Core/Contracts"
-import { CoreHttpClient4_1 } from "TFS/Core/RestClient";
+import { VssClientHelper } from './vssClientHelper';
 
 export interface TemplateDetails {
     name: string;
@@ -7,31 +6,25 @@ export interface TemplateDetails {
 }
 
 export class TemplateLogic {
-    public static getCurrentProjectTemplateName(projectId: string): PromiseLike<TemplateDetails> {
-        return this.getProjectTemplate(projectId)
-            .then((template: TemplateDetails) => {
-                if (!template) console.warn("Cannot retrive template");
-                return template;
-            });
+    public static async getCurrentProjectTemplateName(projectId: string): Promise<TemplateDetails> {
+        console.log(`Retrieving project template for project: ${projectId}`);
+        const template = await this.getProjectTemplate(projectId);
+
+        if (!template) console.warn("Cannot retrieve template");
+        else console.log("Project template: " + template.name);
+        
+        return template;
     }
 
-    private static getProjectTemplate(projectId: string): Promise<TemplateDetails> {
-        return new Promise<TemplateDetails>((resolve, reject) => {
-            VSS.require(["TFS/Core/RestClient"], (TFS_Wit_WebApi: any) => {
-                let client = <CoreHttpClient4_1>TFS_Wit_WebApi.getClient();
-                client.getProject(projectId, true).then(
-                    (project: TeamProject) => {
-                        let template = project.capabilities.processTemplate ?
-                            <TemplateDetails>{
-                                id: project.capabilities.processTemplate.templateTypeId,
-                                name: project.capabilities.processTemplate.templateName
-                            }
-                            : undefined;
-
-                        console.log("Project Template from tfs api: " + (template && template.name));
-                        resolve(template);
-                    });
-            });
-        });
+    private static async getProjectTemplate(projectId: string): Promise<TemplateDetails> {
+        const client = await VssClientHelper.getCoreHttpClient();
+        const project = await client.getProject(projectId, true);
+        const template = project.capabilities.processTemplate ?
+            <TemplateDetails>{
+                id: project.capabilities.processTemplate.templateTypeId,
+                name: project.capabilities.processTemplate.templateName
+            }
+            : undefined;
+        return template;
     }
 }

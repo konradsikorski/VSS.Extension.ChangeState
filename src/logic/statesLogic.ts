@@ -1,3 +1,4 @@
+import { WorkItem } from 'TFS/WorkItemTracking/Contracts';
 import {Template} from './templates/core'
 import TFS_Wit_Client = require("TFS/WorkItemTracking/RestClient"); 
 
@@ -23,55 +24,48 @@ export class StateLogic {
         return states;
     }
 
-    public static changeStatus(selectedItems: Array<number>, template: Template, toState: string): void{
+    public static async changeStatus(selectedItems: Array<number>, template: Template, toState: string): Promise<void>{
         let witClient = TFS_Wit_Client.getClient();
-        witClient.getWorkItems(selectedItems, ["System.State", "System.WorkItemType"])
-            .then( (workItems) => {
-                console.log("GET: " + JSON.stringify(workItems));
+        const workItems = await witClient.getWorkItems(selectedItems, ["System.State", "System.WorkItemType"])
+        console.log("GET: " + JSON.stringify(workItems));
 
-                for(let i=0; i<workItems.length; ++i){
-                    let item = workItems[i];
+        for(let i=0; i<workItems.length; ++i){
+            await this.updateWorkItem(workItems[i], witClient, toState);
+        }
+    }
 
-                    let id = item.id;
-                    let revision = item.rev;
-                    let type = item.fields["System.WorkItemType"];
-                    let state = item.fields["System.State"];
-                    console.log( `ID: ${id}, Type: ${type}, State: ${state}, Revision: ${revision}`);
-                    
-                    let newState = toState;
-                    if(!newState) {
-                        console.log(`Cannot change status for this item. Template: ${template}`);
-                        continue;
-                    }
-                    
-                    console.log( `Template: ${template.name}, New state: ${newState}`);
+    private static async updateWorkItem(item: WorkItem, witClient: TFS_Wit_Client.WorkItemTrackingHttpClient4_1, newState: string): Promise<void> {
+        let id = item.id;
+        let revision = item.rev;
+        let type = item.fields["System.WorkItemType"];
+        let state = item.fields["System.State"];
+        console.log( `ID: ${id}, Type: ${type}, State: ${state}, Revision: ${revision}`);
+        
+        if(!newState) {
+            console.log(`Cannot change status for this item.`);
+            return;
+        }
+        
+        console.log( `New state: ${newState}`);
 
-                    let update = [
-                        {
-                            "op": "test",
-                            "path": "/rev",
-                            "value": revision
-                        },
-                        {
-                            "op": "add",
-                            "path": "/fields/System.State",
-                            "value": newState
-                        }
-                        ];
-                    
-                    try {
-                        witClient.updateWorkItem(update, id).then( (workItem) => {
-                            console.log('Work item UPDATED: ' + workItem.id);
-                        });
-                    }
-                    catch(e) {
-                        console.error(`Work item (${id}) update error: ${e}`)
-                    }
-                }
-
-                // VSS.getService(VSS.ServiceIds.Navigation).then(function(navigationService) {
-                //     navigationService.reload();
-                // });
-            });                
+        let update = [
+            {
+                "op": "test",
+                "path": "/rev",
+                "value": revision
+            },
+            {
+                "op": "add",
+                "path": "/fields/System.State",
+                "value": newState
+            }
+        ];
+        
+        try {
+            await witClient.updateWorkItem(update, id);
+            console.log('Work item UPDATED: ' + id);
+        } catch(e) {
+            console.error(`Work item (${id}) update error: ${e}`);
+        }
     }
 }
