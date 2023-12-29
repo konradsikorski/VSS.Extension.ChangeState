@@ -27,42 +27,36 @@ export class MenuHandler {
 
     changeStateMenuHandler = (context: any): IContributedMenuSource => {
         return <IContributedMenuSource>{
-            getMenuItems: (actionContext: any) => {
-                return this.menuHandlerStart()
-                    .then(projectTemplate => {
-                        let subMenus = (!projectTemplate)
-                            ? this.buildSelectProjectTemplateMenu()
-                            : this.buildStatesMenu(actionContext, projectTemplate);
-
-                        return this.buildMainMenu(subMenus);
-                    });
+            getMenuItems: async (actionContext: any) => {
+                const projectTemplate = await this.menuHandlerStart()
+                let subMenus = (!projectTemplate)
+                    ? this.buildSelectProjectTemplateMenu()
+                    : this.buildStatesMenu(actionContext, projectTemplate)
+                
+                return this.buildMainMenu(subMenus)
             }
         };
     }
 
-    private menuHandlerStart(): IPromise<Template> {
+    private async menuHandlerStart(): Promise<Template> {
         // try get the template from cache
         let templateFromCache = CookieLogic.getProjectTemplate(this.projectId);
         if (templateFromCache) {
             console.log("Project template loaded from cache");
             this._projectTemplate = new Template(templateFromCache);
-            return Promise.resolve(this._projectTemplate);
+            return this._projectTemplate;
         }
 
-        return TemplateLogic.getCurrentProjectTemplateName(this.projectId)
-            .then(templateDetails => {
-                this.projectTemplate = this.templateDefinitions.getTemplate(templateDetails && templateDetails.name);
+        const templateDetails = await TemplateLogic.getCurrentProjectTemplateName(this.projectId)
+        this.projectTemplate = this.templateDefinitions.getTemplate(templateDetails && templateDetails.name)
 
-                if (this.projectTemplate) return this.projectTemplate
-                else {
-                    return WorkItemTypeLogic.getProjectTemplateDetails(this.projectId)
-                        .then((templateWorkItem) => {
-                            this.projectTemplate = templateWorkItem ? new Template(templateWorkItem) : undefined;
-                            console.log(`Project template created form Work Item Types: ${this.projectTemplate != undefined}`);
-                            return this.projectTemplate;
-                        })
-                }
-            });
+        if (this.projectTemplate) return this.projectTemplate
+        else {
+            const templateWorkItem = await WorkItemTypeLogic.getProjectTemplateDetails(this.projectId);
+            this.projectTemplate = templateWorkItem ? new Template(templateWorkItem) : undefined;
+            console.log(`Project template created form Work Item Types: ${this.projectTemplate != undefined}`);
+            return this.projectTemplate;
+        }
     }
 
     private buildMainMenu(subMenus: IContributedMenuItem[]): Array<IContributedMenuItem> {
@@ -114,8 +108,8 @@ export class MenuHandler {
             subMenus.push({
                 text: state,
                 icon: icons.indexOf(icon) >= 0 ? `static/images/status${icon}.png` : undefined,
-                action: (actionContext: any) => {
-                    StateLogic.changeStatus(ids, template, state);
+                action: async (actionContext: any) => {
+                    await StateLogic.changeStatus(ids, template, state);
                 }
             });
         }
