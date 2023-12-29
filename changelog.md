@@ -1,5 +1,10 @@
 ## Changelog
 
+### v. 2.7.0
+
++ refactor to use async pattern
++ remove old not used code
+
 ### v. 2.6.0
 
 + support for new Azure Devops Boards Hub
