@@ -32,8 +32,10 @@ After changing the state the view will not be refreshed, you have to refresh the
 
 Extension is working for built-in and custom project templates. For custom project templates options for state menu will be sorted alphabetically and may have no icons.
 
-## Project Template Selection
+## Initial loading behavior
 
-If  extension will not be able to get information about your current project template then you will see an option to select the project template like this (you have to set it only once):
+Upon your first access of the context menu after refreshing the page, there will be an approximate 5-second delay before the "Change State" option becomes visible. This delay is necessary for the extension to properly load and read the project template details, ensuring that the correct statuses are displayed.After this initial loading period, the "Change State" option will appear immediately in the context menu for subsequent uses. However, if you refresh the page, the process will repeat.
 
-![selectTemplate](/readme/img/selectTemplate.png)
+## Ignoring transition rules in state selection
+
+For each Work Item type, such as a Task, the context menu displays all possible states (e.g., New, In Progress, Closed) regardless of the current state. It does not account for transition conditions; for instance, even if a Task is in the 'New' state, where typically only 'In Progress' is the next logical state, the menu will still show all options. This design choice is made to ensure faster access to the context menu during every use.
