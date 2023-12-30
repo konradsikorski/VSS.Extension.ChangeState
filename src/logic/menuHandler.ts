@@ -1,126 +1,56 @@
-import { StateLogic } from "./statesLogic"
-import { TemplateLogic, TemplateDetails } from "./templateLogic"
-import { TemplateDefinitions } from "./templateDefinitions"
-import { WorkItemTypeLogic } from "./workItemTypesLogic"
-import { Template } from "./templates/core"
-import { CookieLogic } from "./cookieLogic";
+import { StateLogic } from "./statesLogic";
+import { WorkItemTypeLogic } from "./workItemTypesLogic";
+import { Template } from "./templates/core";
+import { Cache } from "./cache";
 import { ActionContextWrapper } from "./actionContextWrapper";
+import TFS_Wit_Client = require("TFS/WorkItemTracking/RestClient"); 
 
 export class MenuHandler {
-    projectId: string;
-    _projectTemplate?: Template = undefined;
-    templateDefinitions: TemplateDefinitions = new TemplateDefinitions();
+    private projectId: string;
 
     constructor() {
-        let context = VSS.getWebContext();
-        this.projectId = context.project.id;
-    }
-
-    get projectTemplate(): Template {
-        return this._projectTemplate;
-    }
-
-    set projectTemplate(template: Template) {
-        if (template) CookieLogic.saveProjectTemplate(this.projectId, template.template);
-        this._projectTemplate = template;
+        this.projectId = VSS.getWebContext().project.id;
+        this.getMenuItems = this.getMenuItems.bind(this);
     }
 
     changeStateMenuHandler = (context: any): IContributedMenuSource => {
+        console.debug("Extension started");
         return <IContributedMenuSource>{
-            getMenuItems: (actionContext: any) => {
-                return this.menuHandlerStart()
-                    .then(projectTemplate => {
-                        let subMenus = (!projectTemplate)
-                            ? this.buildSelectProjectTemplateMenu()
-                            : this.buildStatesMenu(actionContext, projectTemplate);
-
-                        return this.buildMainMenu(subMenus);
-                    });
-            }
+            getMenuItems: this.getMenuItems
         };
     }
 
-    private menuHandlerStart(): IPromise<Template> {
-        // try get the template from cache
-        let templateFromCache = CookieLogic.getProjectTemplate(this.projectId);
-        if (templateFromCache) {
-            console.log("Project template loaded from cache");
-            this._projectTemplate = new Template(templateFromCache);
-            return Promise.resolve(this._projectTemplate);
-        }
-
-        return TemplateLogic.getCurrentProjectTemplateName(this.projectId)
-            .then(templateDetails => {
-                this.projectTemplate = this.templateDefinitions.getTemplate(templateDetails && templateDetails.name);
-
-                if (this.projectTemplate) return this.projectTemplate
-                else {
-                    return WorkItemTypeLogic.getProjectTemplateDetails(this.projectId)
-                        .then((templateWorkItem) => {
-                            this.projectTemplate = templateWorkItem ? new Template(templateWorkItem) : undefined;
-                            console.log(`Project template created form Work Item Types: ${this.projectTemplate != undefined}`);
-                            return this.projectTemplate;
-                        })
-                }
-            });
+    private async getMenuItems(actionContext: any): Promise<IContributedMenuItem[]> {
+        const subMenus = await this.buildStatesMenu(actionContext);
+        return this.buildMainMenu(subMenus);
     }
 
-    private buildMainMenu(subMenus: IContributedMenuItem[]): Array<IContributedMenuItem> {
-        return new Array<IContributedMenuItem>(
+    private buildMainMenu(subMenus: IContributedMenuItem[] | Promise<IContributedMenuItem[]>): IContributedMenuItem[] {
+        return [
             {
                 text: "Change state",
                 groupId: "modify",
                 icon: "static/images/changeStatusAction.png",
                 childItems: subMenus,
-            });
-    }
-
-    private buildSelectProjectTemplateMenu(): IContributedMenuItem[] {
-        return [
-            {
-                text: "What is your project template?",
-                childItems: [
-                    {
-                        text: "Agile",
-                        action: (actionContext: any) => {
-                            this.selectProjectTemplate("Agile");
-                        }
-                    },
-                    {
-                        text: "Scrum",
-                        action: (actionContext: any) => {
-                            this.selectProjectTemplate("Scrum");
-                        }
-                    }
-                ]
             }
         ];
     }
 
-    private buildStatesMenu(actionContext: any, template: Template): IContributedMenuItem[] {
-        let ids = ActionContextWrapper.GetWorkItemIds(actionContext);
+    private async buildStatesMenu(actionContext: any): Promise<IContributedMenuItem[]> {
+        const ids = ActionContextWrapper.GetWorkItemIds(actionContext);
+        const selectedItemsTypes = ActionContextWrapper.GetWorkItemTypes(actionContext);
+        const template = await this.getProjectTemplate();
+        const commonStatuses = StateLogic.getCommonStatuses(template, selectedItemsTypes);
 
-        let subMenus = new Array<IContributedMenuItem>();
-        const icons = ["Active", "Approved", "Closed", "Committed", "Design", "Done", "InProgress",
-            "New", "Open", "Ready", "Removed", "Resolved", "ToDo"];
+        const subMenus: IContributedMenuItem[] = commonStatuses.map((state) => ({
+            text: state,
+            icon: this.getIcon(state),
+            action: async (actionContext: any) => {
+                await StateLogic.changeStatus(ids, state);
+            }
+        }));
 
-        let selectedItemsTypes = ActionContextWrapper.GetWorkItemTypes(actionContext);
-        let commonStatuses = StateLogic.getCommonStatuses(template, selectedItemsTypes);
-
-        for (let i = 0; i < commonStatuses.length; ++i) {
-            let state = commonStatuses[i];
-            let icon = state.replace(' ', '');
-
-            subMenus.push({
-                text: state,
-                icon: icons.indexOf(icon) >= 0 ? `static/images/status${icon}.png` : undefined,
-                action: (actionContext: any) => {
-                    StateLogic.changeStatus(ids, template, state);
-                }
-            });
-        }
-
-        if (subMenus.length == 0) {
+        if (subMenus.length === 0) {
             subMenus.push({
                 text: '(empty)',
                 noIcon: true,
@@ -131,7 +61,26 @@ export class MenuHandler {
         return subMenus;
     }
 
-    private selectProjectTemplate(templateName: string) {
-        this.projectTemplate = this.templateDefinitions.getTemplate(templateName);
+    private async getProjectTemplate(): Promise<Template> {
+        let templateFromCache = Cache.getProjectTemplate(this.projectId);
+        if (templateFromCache) {
+            console.log("Project template loaded from cache");
+            return new Template(templateFromCache);
+        }
+        
+        const templateWorkItem = await WorkItemTypeLogic.getProjectTemplateDetails(this.projectId);
+        const projectTemplate = templateWorkItem ? new Template(templateWorkItem) : undefined;
+        if (projectTemplate) Cache.saveProjectTemplate(this.projectId, projectTemplate.template)
+
+        console.log(`Project template created from Work Item Types: ${projectTemplate != undefined}`);
+        return projectTemplate;
     }
-}      
+
+    private getIcon(state: string): string | undefined {
+        const icons = ["Active", "Approved", "Closed", "Committed", "Design", "Done", "InProgress",
+            "New", "Open", "Ready", "Removed", "Resolved", "ToDo"];
+
+        const icon = state.replace(' ', '');
+        return icons.includes(icon) ? `static/images/status${icon}.png` : undefined;
+    }
+}

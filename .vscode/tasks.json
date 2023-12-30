@@ -19,7 +19,8 @@
                 "command": "tsc",
                 "args": [
                     "-p",
-                    "./tsconfig.DEV.json"
+                    "./tsconfig.DEV.json",
+                    "--watch"
                 ],
                 "problemMatcher": "$tsc-watch",
                 "group": {

@@ -1,32 +1,37 @@
-import { WorkItemType } from "TFS/WorkItemTracking/Contracts";
+import { WorkItemStateTransition, WorkItemType } from "TFS/WorkItemTracking/Contracts";
 import { ITemplate } from "./templates/core";
-import { WorkItemTrackingHttpClient4_1 } from "TFS/WorkItemTracking/RestClient";
+import { VssClientHelper } from './vssClientHelper';
 
 export class WorkItemTypeLogic {
+    public static async getProjectTemplateDetails(projectId: string): Promise<ITemplate> {
+        console.log("Retriving Work Item Types from DevOps");
+        const client = await VssClientHelper.getWorkItemTrackingHttpClient();
+        const workItemTypes = await client.getWorkItemTypes(projectId);
 
-    public static getProjectTemplateDetails(projectId: string): IPromise<ITemplate> {
-        console.log("Trying to retrieve Work Item Types from DevOps");
-        return new Promise<ITemplate>((resolve, reject) => {
-            VSS.require(["TFS/WorkItemTracking/RestClient"], (restClient: any) => {
-                let client = <WorkItemTrackingHttpClient4_1>restClient.getClient();
+        const template = this.extractWorkItemTypes(workItemTypes);
 
-                client.getWorkItemTypes(projectId).then(
-                    (workItemTypes: WorkItemType[]) => {
-                        let template = <ITemplate>{};
+        return template;
+    }
 
-                        for (let workItemType of workItemTypes) {
-                            let states = new Array();
+    private static extractWorkItemTypes(workItemTypes: WorkItemType[]): ITemplate {
+        const template: ITemplate = {};
 
-                            for (let state in workItemType.transitions) {
-                                if (state) states.push(state);
-                            }
+        for (const workItemType of workItemTypes) {
+            const states = this.extractStates(workItemType.transitions);
 
-                            template[workItemType.name] = states;
-                        }
+            template[workItemType.name] = states;
+        }
 
-                        return resolve(template);
-                    });
-            });
-        });
+        return template;
+    }
+
+    private static extractStates(transitions: { [key: string]: WorkItemStateTransition[] }): string[] {
+        const states: string[] = [];
+
+        for (const state in transitions) {
+            if (state) states.push(state);
+        }
+
+        return states;
     }
 }
