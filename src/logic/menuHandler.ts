@@ -3,6 +3,7 @@ import { WorkItemTypeLogic } from "./workItemTypesLogic";
 import { Template } from "./templates/core";
 import { Cache } from "./cache";
 import { ActionContextWrapper } from "./actionContextWrapper";
+import TFS_Wit_Client = require("TFS/WorkItemTracking/RestClient"); 
 
 export class MenuHandler {
     private projectId: string;
@@ -13,35 +14,18 @@ export class MenuHandler {
     }
 
     changeStateMenuHandler = (context: any): IContributedMenuSource => {
-        console.log("Extension started");
+        console.debug("Extension started");
         return <IContributedMenuSource>{
             getMenuItems: this.getMenuItems
         };
     }
 
     private async getMenuItems(actionContext: any): Promise<IContributedMenuItem[]> {
-        const projectTemplate = await this.getProjectTemplate();
-        const subMenus = this.buildStatesMenu(actionContext, projectTemplate);
-        
+        const subMenus = await this.buildStatesMenu(actionContext);
         return this.buildMainMenu(subMenus);
     }
 
-    private async getProjectTemplate(): Promise<Template> {
-        let templateFromCache = Cache.getProjectTemplate(this.projectId);
-        if (templateFromCache) {
-            console.log("Project template loaded from cache");
-            return new Template(templateFromCache);
-        }
-        
-        const templateWorkItem = await WorkItemTypeLogic.getProjectTemplateDetails(this.projectId);
-        const projectTemplate = templateWorkItem ? new Template(templateWorkItem) : undefined;
-        if (projectTemplate) Cache.saveProjectTemplate(this.projectId, projectTemplate.template)
-
-        console.log(`Project template created from Work Item Types: ${projectTemplate != undefined}`);
-        return projectTemplate;
-    }
-
-    private buildMainMenu(subMenus: IContributedMenuItem[]): IContributedMenuItem[] {
+    private buildMainMenu(subMenus: IContributedMenuItem[] | Promise<IContributedMenuItem[]>): IContributedMenuItem[] {
         return [
             {
                 text: "Change state",
@@ -52,9 +36,10 @@ export class MenuHandler {
         ];
     }
 
-    private buildStatesMenu(actionContext: any, template: Template): IContributedMenuItem[] {
+    private async buildStatesMenu(actionContext: any): Promise<IContributedMenuItem[]> {
         const ids = ActionContextWrapper.GetWorkItemIds(actionContext);
         const selectedItemsTypes = ActionContextWrapper.GetWorkItemTypes(actionContext);
+        const template = await this.getProjectTemplate();
         const commonStatuses = StateLogic.getCommonStatuses(template, selectedItemsTypes);
 
         const subMenus: IContributedMenuItem[] = commonStatuses.map((state) => ({
@@ -74,6 +59,21 @@ export class MenuHandler {
         }
 
         return subMenus;
+    }
+
+    private async getProjectTemplate(): Promise<Template> {
+        let templateFromCache = Cache.getProjectTemplate(this.projectId);
+        if (templateFromCache) {
+            console.log("Project template loaded from cache");
+            return new Template(templateFromCache);
+        }
+        
+        const templateWorkItem = await WorkItemTypeLogic.getProjectTemplateDetails(this.projectId);
+        const projectTemplate = templateWorkItem ? new Template(templateWorkItem) : undefined;
+        if (projectTemplate) Cache.saveProjectTemplate(this.projectId, projectTemplate.template)
+
+        console.log(`Project template created from Work Item Types: ${projectTemplate != undefined}`);
+        return projectTemplate;
     }
 
     private getIcon(state: string): string | undefined {

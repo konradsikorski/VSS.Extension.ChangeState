@@ -1,5 +1,5 @@
 import { WorkItem } from 'TFS/WorkItemTracking/Contracts';
-import { Template } from './templates/core'
+import { Template } from './templates/core';
 import TFS_Wit_Client = require("TFS/WorkItemTracking/RestClient"); 
 
 export class StateLogic {
