@@ -44,7 +44,7 @@ export class MenuHandler {
     private buildMainMenu(subMenus: IContributedMenuItem[]): IContributedMenuItem[] {
         return [
             {
-                text: "Change state2",
+                text: "Change state",
                 groupId: "modify",
                 icon: "static/images/changeStatusAction.png",
                 childItems: subMenus,
