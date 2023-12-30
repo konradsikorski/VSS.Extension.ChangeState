@@ -4,7 +4,7 @@ import { VssClientHelper } from './vssClientHelper';
 
 export class WorkItemTypeLogic {
     public static async getProjectTemplateDetails(projectId: string): Promise<ITemplate> {
-        console.log("Trying to retrieve Work Item Types from DevOps");
+        console.log("Retriving Work Item Types from DevOps");
         const client = await VssClientHelper.getWorkItemTrackingHttpClient();
         const workItemTypes = await client.getWorkItemTypes(projectId);
 
@@ -25,7 +25,7 @@ export class WorkItemTypeLogic {
         return template;
     }
 
-    private static extractStates(transitions: {[key: string]: WorkItemStateTransition[]}): string[] {
+    private static extractStates(transitions: { [key: string]: WorkItemStateTransition[] }): string[] {
         const states: string[] = [];
 
         for (const state in transitions) {
